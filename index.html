@@ -1,0 +1,1445 @@
+<title>Хроники Утерянной Летописи — сценарий квеста</title>
+<style>
+  :root{
+    --parchment: #e8e2d0;
+    --parchment-2: #ddd5bd;
+    --parchment-3: #f2eee0;
+    --ink: #262a20;
+    --ink-soft: #56543f;
+    --ink-faint: #7a765c;
+    --accent: #3d5a4c;
+    --accent-strong: #2c4438;
+    --accent-2: #8a2e22;
+    --gold: #a37f2c;
+    --line: #c9bfa2;
+    --shadow: rgba(38,42,32,0.12);
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "URW Palladio L", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --parchment: #1b1d17;
+      --parchment-2: #23261d;
+      --parchment-3: #16180f;
+      --ink: #e7e1cd;
+      --ink-soft: #b4ad91;
+      --ink-faint: #8b8567;
+      --accent: #74ab93;
+      --accent-strong: #8fc4ac;
+      --accent-2: #d97a67;
+      --gold: #c9a04f;
+      --line: #3a3a2a;
+      --shadow: rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --parchment: #1b1d17; --parchment-2: #23261d; --parchment-3: #16180f;
+    --ink: #e7e1cd; --ink-soft: #b4ad91; --ink-faint: #8b8567;
+    --accent: #74ab93; --accent-strong: #8fc4ac; --accent-2: #d97a67;
+    --gold: #c9a04f; --line: #3a3a2a; --shadow: rgba(0,0,0,0.4);
+  }
+  :root[data-theme="light"]{
+    --parchment: #e8e2d0; --parchment-2: #ddd5bd; --parchment-3: #f2eee0;
+    --ink: #262a20; --ink-soft: #56543f; --ink-faint: #7a765c;
+    --accent: #3d5a4c; --accent-strong: #2c4438; --accent-2: #8a2e22;
+    --gold: #a37f2c; --line: #c9bfa2; --shadow: rgba(38,42,32,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.55;
+    min-height:100vh;
+  }
+  a{color:var(--accent-strong);}
+
+  .app{display:flex; min-height:100vh;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width:280px; flex:none;
+    background:var(--parchment-3);
+    border-right:1px solid var(--line);
+    padding:20px 14px 40px;
+    overflow-y:auto;
+    position:sticky; top:0; height:100vh;
+  }
+  .brand{
+    font-family:var(--serif);
+    font-size:19px;
+    line-height:1.25;
+    color:var(--ink);
+    padding:4px 6px 14px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:14px;
+  }
+  .brand small{
+    display:block; margin-top:4px;
+    font-family:var(--sans); font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink-faint); font-weight:600;
+  }
+  .navgroup{margin-bottom:18px;}
+  .navgroup-label{
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:700; padding:0 8px 6px;
+  }
+  .navbtn{
+    display:flex; align-items:baseline; gap:8px; width:100%;
+    text-align:left; background:none; border:none; cursor:pointer;
+    font-family:var(--sans); font-size:13.5px; color:var(--ink-soft);
+    padding:7px 8px; border-radius:5px; line-height:1.3;
+  }
+  .navbtn .num{
+    font-family:var(--serif); font-size:12px; color:var(--gold);
+    min-width:16px; font-weight:700;
+  }
+  .navbtn:hover{background:var(--parchment-2); color:var(--ink);}
+  .navbtn.active{background:var(--accent); color:#f3f0e4; font-weight:600;}
+  .navbtn.active .num{color:#f3f0e4;}
+  .navbtn.sub{padding-left:20px; font-size:13px;}
+
+  .sidebar-foot{
+    margin-top:10px; padding:10px 8px 0; border-top:1px solid var(--line);
+  }
+  .printbtn{
+    width:100%; padding:9px 10px; border-radius:6px; border:1px solid var(--line);
+    background:var(--parchment-2); color:var(--ink); font-family:var(--sans);
+    font-size:12.5px; font-weight:600; cursor:pointer; letter-spacing:.02em;
+  }
+  .printbtn:hover{border-color:var(--accent);}
+
+  .menutoggle{display:none;}
+
+  /* ---------- Main ---------- */
+  .main{flex:1; min-width:0; padding:36px 44px 90px; max-width:900px;}
+  .section{display:none;}
+  .section.active{display:block;}
+
+  h1.pagetitle{
+    font-family:var(--serif); font-weight:700; font-size:30px;
+    text-wrap:balance; margin:0 0 6px; color:var(--ink);
+  }
+  .pagetitle .chnum{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:50%; border:1.5px solid var(--gold);
+    color:var(--gold); font-size:15px; font-family:var(--serif); font-weight:700;
+    margin-right:10px; vertical-align:middle;
+  }
+  .subtitle{
+    color:var(--ink-soft); font-size:14px; margin:0 0 26px;
+  }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; letter-spacing:.03em; font-weight:700;
+    padding:3px 9px; border-radius:20px; background:var(--parchment-2);
+    color:var(--ink-soft); border:1px solid var(--line);
+  }
+  .chip.warn{ background:transparent; border-color:var(--accent-2); color:var(--accent-2); }
+  .chip.ok{ border-color:var(--accent); color:var(--accent-strong); }
+
+  .field{margin-bottom:28px;}
+  .field-label{
+    font-size:12px; letter-spacing:.07em; text-transform:uppercase;
+    font-weight:700; color:var(--ink-faint); margin-bottom:8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .field-body{font-size:15px; color:var(--ink);}
+  .field-body p{margin:0 0 10px;}
+
+  .loc-box{
+    background:var(--parchment-2); border:1px solid var(--line); border-radius:8px;
+    padding:12px 16px; font-size:14.5px;
+  }
+  .loc-box .addr{font-weight:700; font-family:var(--serif); font-size:16px;}
+  .loc-box .note{color:var(--ink-soft); font-size:13px; margin-top:4px;}
+
+  .cast{display:flex; flex-direction:column; gap:10px;}
+  .cast-item{
+    display:grid; grid-template-columns:170px 1fr; gap:14px;
+    padding:12px 14px; background:var(--parchment-2); border-radius:8px;
+    border:1px solid var(--line);
+  }
+  .cast-role{font-weight:700; font-family:var(--serif); font-size:15px;}
+  .cast-role .who{
+    display:block; font-family:var(--sans); font-weight:600; font-size:12px;
+    color:var(--accent-strong); margin-top:3px;
+  }
+  .cast-role .who.tbd{color:var(--accent-2);}
+  .cast-does{font-size:13.5px; color:var(--ink-soft);}
+
+  ol.steps{margin:0; padding-left:22px;}
+  ol.steps li{margin-bottom:8px; padding-left:2px;}
+
+  .scroll{
+    background:var(--parchment-3);
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold);
+    border-radius:6px;
+    padding:16px 20px;
+    font-family:var(--serif);
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink);
+    margin:10px 0 16px;
+    white-space:pre-line;
+  }
+  .scroll-label{
+    font-family:var(--sans); font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    font-weight:700; color:var(--gold); margin-bottom:6px; display:block;
+  }
+  .line-say{
+    font-size:13.5px; font-weight:700; color:var(--ink-soft); margin:14px 0 4px;
+  }
+
+  table{border-collapse:collapse; width:100%; font-size:13.5px;}
+  th,td{
+    text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  th{
+    font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:700; background:var(--parchment-2);
+  }
+  td.num{font-variant-numeric:tabular-nums;}
+  .tbl-wrap{overflow-x:auto; border-radius:8px; border:1px solid var(--line);}
+  .tbl-wrap table{border:none;}
+  .tbl-wrap th:first-child, .tbl-wrap td:first-child{padding-left:14px;}
+
+  .quiz-item{
+    padding:12px 14px; background:var(--parchment-2); border-radius:7px;
+    margin-bottom:8px; font-size:14px;
+  }
+  .quiz-item .q{font-weight:600; margin-bottom:6px;}
+  .quiz-item .opts{margin:0; padding-left:18px; color:var(--ink-soft);}
+  .quiz-item .opts li.correct{color:var(--accent-strong); font-weight:700;}
+
+  .riddle{
+    background:var(--parchment-2); border-radius:7px; padding:12px 16px;
+    margin-bottom:10px; font-size:14px;
+  }
+  .riddle .verse{font-family:var(--serif); font-style:italic; white-space:pre-line; color:var(--ink);}
+  .riddle .ans{margin-top:8px; font-size:12.5px; font-weight:700; color:var(--accent-strong);}
+
+  .fact-list{margin:0; padding-left:20px;}
+  .fact-list li{margin-bottom:5px;}
+  .fact-list li.fake{color:var(--accent-2); font-weight:700;}
+
+  .end-box{
+    display:flex; gap:14px; background:var(--parchment-2); border-radius:8px;
+    padding:14px 16px; border:1px solid var(--line);
+  }
+  .end-box .mark{font-family:var(--serif); font-size:20px; color:var(--gold);}
+
+  .timebox{
+    display:inline-block; font-family:var(--sans); font-weight:700; font-size:14px;
+    padding:5px 12px; border-radius:6px; background:var(--parchment-2);
+    border:1px solid var(--line); font-variant-numeric:tabular-nums;
+  }
+
+  .note-open{
+    border:1px dashed var(--accent-2); border-radius:7px; padding:10px 14px;
+    font-size:13px; color:var(--accent-2); margin-top:8px; background:transparent;
+  }
+  .note-open b{color:var(--accent-2);}
+
+  .route{
+    display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:8px 0 6px;
+  }
+  .route .stop{
+    background:var(--parchment-2); border:1px solid var(--line); border-radius:7px;
+    padding:8px 12px; font-size:13px; font-weight:600; min-width:0;
+  }
+  .route .stop .t{font-family:var(--serif); font-size:14px;}
+  .route .stop .a{display:block; font-size:11.5px; color:var(--ink-soft); font-weight:400; margin-top:2px;}
+  .route .arrow{color:var(--gold); font-size:16px;}
+
+  .legend-block{
+    background:var(--parchment-2); border-radius:8px; padding:18px 22px;
+    border:1px solid var(--line); font-family:var(--serif); font-size:15.5px;
+    line-height:1.7;
+  }
+
+  .rp-grid{display:flex; flex-direction:column; gap:26px;}
+  .rp-ch{
+    border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  }
+  .rp-ch-head{
+    background:var(--parchment-2); padding:9px 16px; font-family:var(--serif);
+    font-weight:700; font-size:14.5px; display:flex; justify-content:space-between; gap:10px;
+  }
+  .rp-ch-head span.loc{font-family:var(--sans); font-weight:600; font-size:12px; color:var(--ink-soft);}
+  .rp-ch-body{padding:12px 16px;}
+  .rp-ch-body p{margin:0 0 8px; font-size:13.5px;}
+  .rp-remember{
+    background:transparent; border-left:3px solid var(--accent); padding:8px 14px;
+    font-size:13px; color:var(--ink-soft); margin-top:10px;
+  }
+  .rp-remember b{color:var(--ink);}
+
+  .hr{height:1px; background:var(--line); border:none; margin:28px 0;}
+
+  .badge-role{
+    display:inline-block; font-size:11px; padding:2px 8px; border-radius:20px;
+    background:var(--accent); color:#f3f0e4; font-weight:700; margin-right:6px;
+  }
+
+  @media (max-width: 880px){
+    .sidebar{
+      position:fixed; left:0; top:0; bottom:0; z-index:50;
+      transform:translateX(-100%); transition:transform .2s ease;
+      box-shadow:2px 0 18px var(--shadow);
+    }
+    .sidebar.open{transform:translateX(0);}
+    .main{padding:64px 18px 70px;}
+    .menutoggle{
+      display:block; position:fixed; top:12px; left:14px; z-index:60;
+      background:var(--accent); color:#f3f0e4; border:none; border-radius:7px;
+      padding:9px 12px; font-size:13px; font-weight:700; cursor:pointer;
+    }
+    .cast-item{grid-template-columns:1fr;}
+  }
+
+  @media print{
+    .sidebar, .menutoggle{display:none !important;}
+    .main{max-width:100%; padding:0 20px;}
+    .section{display:block !important; page-break-after:always;}
+    body{background:#fff; color:#000; font-size:12px;}
+    .scroll, .quiz-item, .riddle, .end-box, .cast-item, .loc-box{background:#f7f5ee; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  }
+</style>
+
+<div class="app">
+  <button class="menutoggle" id="menutoggle">☰ Меню</button>
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">Хроники Утерянной Летописи
+      <small>Рабочий сценарий — Аля &amp; Максим</small>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgroup-label">Обзор</div>
+      <button class="navbtn" data-target="overview">Легенда, маршрут, роли</button>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgroup-label">Главы</div>
+      <button class="navbtn" data-target="prolog"><span class="num">0</span> Пролог — похищение</button>
+      <button class="navbtn" data-target="ch1"><span class="num">1</span> Родина витязя</button>
+      <button class="navbtn" data-target="ch2"><span class="num">2</span> Дом детства Али</button>
+      <button class="navbtn" data-target="ch3"><span class="num">3</span> Дорога</button>
+      <button class="navbtn" data-target="ch4"><span class="num">4</span> Первый Очаг</button>
+      <button class="navbtn" data-target="ch5"><span class="num">5</span> Заклятье Гномов</button>
+      <button class="navbtn" data-target="ch6"><span class="num">6</span> Перекрёсток</button>
+      <button class="navbtn" data-target="ch7"><span class="num">7</span> Последняя страница</button>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgroup-label">Страницы ролей</div>
+      <button class="navbtn sub" data-target="role-evgeniy">Евгений — Серый Орёл</button>
+      <button class="navbtn sub" data-target="role-evgenia">Евгения</button>
+      <button class="navbtn sub" data-target="role-anastasia">Анастасия</button>
+      <button class="navbtn sub" data-target="role-taya">Тая</button>
+      <button class="navbtn sub" data-target="role-lera">Лера</button>
+      <button class="navbtn sub" data-target="role-lera-r">Лера-рыжая</button>
+      <button class="navbtn sub" data-target="role-andrey">Андрей</button>
+      <button class="navbtn sub" data-target="role-maksim">Максим</button>
+      <button class="navbtn sub" data-target="role-vor">Вор</button>
+      <button class="navbtn sub" data-target="role-operator">Оператор</button>
+      <button class="navbtn sub" data-target="role-mama">Хранительница памяти (мама Али)</button>
+      <button class="navbtn sub" data-target="role-helper">Помощник мамы Али</button>
+    </div>
+
+    <div class="sidebar-foot">
+      <button class="printbtn" onclick="window.print()">🖨 Версия для печати</button>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ================= OVERVIEW ================= -->
+    <section class="section" id="sec-overview">
+      <h1 class="pagetitle">Хроники Утерянной Летописи</h1>
+      <p class="subtitle">Девичник-квест в стиле «Властелина колец» · Хранительница — Аля · Витязь — Максим</p>
+
+      <div class="field">
+        <div class="field-label">Общая легенда</div>
+        <div class="legend-block">В летописях Средиземья давным-давно было записано пророчество о союзе Али и Максима, который должен принести вечный мир в королевство. Но злые силы (назовём их Призраками Прошлого) вырвали страницы из Главной Книги Судеб и похитили жениха, чтобы пророчество не сбылось. Аля становится Хранительницей Летописи. Её задача — проехать по памятным местам, собрать вырванные страницы (записки) и восстановить Хронику их Любви, чтобы спасти Максима.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Общий маршрут</div>
+        <div class="route">
+          <div class="stop"><span class="t">Пролог</span><span class="a">Аламедин-1, д.91</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.1 Родина витязя</span><span class="a">Гоголя, 51 (ГЭС-2)</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.2 Дом детства Али</span><span class="a">Аламедин-1, д.35</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.3 Дорога</span><span class="a">машина → Токтоналиева, 96</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.4 Первый Очаг</span><span class="a">Токтоналиева, 96</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.5 Гномы</span><span class="a">Аламедин-1, д.91</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.6 Перекрёсток</span><span class="a">Аламедин-1, д.35 (др. кв.)</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Гл.7 Финал</span><span class="a">Джакыпова, 34А</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Совет Дев</span><span class="a">Holiday House, 18:00</span></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;">Главы 2 и 6, а также Пролог и Глава 5, проходят по одним и тем же двум адресам — см. таблицу ниже.</p>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Общий тайминг</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Время</th><th>Локация</th><th>Что происходит</th><th>Ответственный на месте</th></tr></thead>
+            <tbody>
+              <tr><td class="num">12 авг, 20:25</td><td>Аламедин-1, д.91</td><td>Пролог — похищение Максима</td><td>Евгений, Вор, Евгения, Анастасия</td></tr>
+              <tr><td class="num">уточняется</td><td>Гоголя, 51 (ГЭС-2)</td><td>Глава 1 — Родина витязя</td><td>Евгения, Анастасия, Тая</td></tr>
+              <tr><td class="num">уточняется</td><td>Аламедин-1, д.35</td><td>Глава 2 — Дом детства Али</td><td>Хранительница памяти, Помощник, Лера</td></tr>
+              <tr><td class="num">уточняется</td><td>в машине → Токтоналиева, 96</td><td>Глава 3 — Дорога</td><td>Лера, Евгений</td></tr>
+              <tr><td class="num">уточняется</td><td>Токтоналиева, 96</td><td>Глава 4 — Первый Очаг</td><td>Лера-рыжая</td></tr>
+              <tr><td class="num">уточняется</td><td>Аламедин-1, д.91</td><td>Глава 5 — Заклятье Гномов</td><td>Евгения, Анастасия</td></tr>
+              <tr><td class="num">уточняется</td><td>Аламедин-1, д.35</td><td>Глава 6 — Перекрёсток</td><td>Евгения (Женя), Лера</td></tr>
+              <tr><td class="num">уточняется</td><td>Джакыпова, 34А</td><td>Глава 7 — Финал</td><td>Андрей, Максим</td></tr>
+              <tr><td class="num">13 авг, 18:00</td><td>Holiday House</td><td>Совет Дев — начало основного девичника</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Распределение ролей</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Персонаж / функция</th><th>Исполнитель</th><th>Участвует в главах</th></tr></thead>
+            <tbody>
+              <tr><td>Крылатый / Серый Орёл (водитель)</td><td><b>Евгений</b></td><td>Пролог, 1–7 (сквозная)</td></tr>
+              <tr><td>Призрак Прошлого №1 / Гном / Женя, Хранитель Далёкой Дороги</td><td><b>Евгения</b></td><td>Пролог, 1, 5, 6</td></tr>
+              <tr><td>Призрак Прошлого №2 / Гном</td><td><b>Анастасия</b></td><td>Пролог, 1, 5</td></tr>
+              <tr><td>Мудрец у яблонь</td><td><b>Тая</b></td><td>1</td></tr>
+              <tr><td>Техконтроль / Хранитель Пути Сердца</td><td><b>Лера</b></td><td>2, 3, 6</td></tr>
+              <tr><td>Хранитель Первого Очага (встречающая)</td><td><b>Лера-рыжая</b></td><td>4</td></tr>
+              <tr><td>Последний Страж</td><td><b>Андрей</b></td><td>7 (+ ожидание с Максимом до финала)</td></tr>
+              <tr><td>Витязь / жених</td><td><b>Максим</b></td><td>Пролог, 7 (упоминается во всех)</td></tr>
+              <tr><td>Вор</td><td class="chip warn">уточняется</td><td>Пролог</td></tr>
+              <tr><td>Оператор (видео)</td><td class="chip warn">уточняется</td><td>сквозная, весь квест</td></tr>
+              <tr><td>Хранительница памяти (мама Али)</td><td class="chip warn">уточняется</td><td>2</td></tr>
+              <tr><td>Помощник мамы Али</td><td class="chip warn">уточняется</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Открытые вопросы (пока не хватает для полной картины)</div>
+        <div class="note-open">
+          <b>Ещё уточнить:</b> роль Стража в Прологе (к кому именно везёт Вор Максима — маршрут «либо к Андрею, либо в цех» пока не зафиксирован окончательно); исполнители ролей Вора, Оператора, Хранительницы памяти и Помощника мамы; ответы Максима на 12 вопросов в Главе 1; список предметов и гномьи рисунки для Главы 5; точный тайминг по всем главам, кроме Пролога (20:25–20:40) и финального Совета Дев (13 авг, 18:00).
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ПРОЛОГ ================= -->
+    <section class="section" id="sec-prolog">
+      <h1 class="pagetitle"><span class="chnum">0</span>Пролог — Похищение Витязя</h1>
+      <p class="subtitle">12 августа, вечер</p>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Аламедин-1, дом 91</div><div class="note">Квартира Али и Максима — та же локация, что и Глава 5</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Обычный вечер внезапно становится началом приключения. Аля ещё не знает, что происходит квест — для неё это просто поход в магазин с Максимом. В момент похищения она должна почувствовать тревогу и азарт одновременно: её жениха только что увели у неё на глазах, и единственный путь его вернуть — довериться древнему зову и позвать Серого Орла.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Максим<span class="who">Исполнитель: Максим</span></div>
+            <div class="cast-does">В 20:30–20:40 выходит с Алей якобы в магазин. В этот момент его похищает Вор.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Вор<span class="who tbd">Исполнитель: уточняется</span></div>
+            <div class="cast-does">Похищает Максима, сажает в машину и увозит. Маршрут (окончательно не выбран): либо сразу к Андрею — Хранителю последней летописи, который позже устроит с Алей схватку на мечах (Глава 7), либо сначала в «цех» переждать, пока Андрей не освободится и не отвезёт обоих к Насте домой на Дордой (Джакыпова, 34А), где будет финал.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Евгений — Серый Орёл<span class="who">Исполнитель: Евгений</span></div>
+            <div class="cast-does">На месте уже в 20:25, машина готова. Заранее днём заднее сиденье занавешивается шторкой, чтобы Аля не видела маршрут — добавляет загадочности. После похищения подходит к Але и спрашивает пароль ещё раз.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Евгения и Анастасия<span class="who">Исполнители: Евгения, Анастасия</span></div>
+            <div class="cast-does">Появляются сразу после похищения, вручают Але первый свиток (стараясь не рассмеяться), называют пароль и номер для вызова Орла. Затем сразу уезжают на ГЭС готовить Главу 1.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Оператор<span class="who tbd">Исполнитель: уточняется</span></div>
+            <div class="cast-does">Главный и единственный оператор мероприятия — присутствует на всех локациях, в тематическом наряде. Может немного шутить на фоне, но в меру, чтобы не разрушать магическую атмосферу.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Днём заранее Евгений завешивает заднее окно машины шторкой.</li>
+          <li>20:25 — Евгений уже на месте у дома (Аламедин-1, д.91).</li>
+          <li>20:30–20:40 — Максим и Аля выходят из дома якобы в магазин.</li>
+          <li>Вор похищает Максима, сажает в машину, увозит по одному из двух маршрутов.</li>
+          <li>Евгения и Анастасия подходят к Але, вручают первый свиток, называют пароль «гномий брат» и номер для вызова Орла.</li>
+          <li>Евгения и Анастасия уезжают на ГЭС готовить Главу 1.</li>
+          <li>Аля называет пароль (звонит/подходит к Евгению).</li>
+          <li>Евгений уточняет пароль ещё раз, Аля садится в машину.</li>
+          <li>Едут к первой цели — ГЭС-2, Гоголя, 51.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Первый свиток</span>
+        <div class="scroll">Внемли, Избранная Аля! Пророчество древних магов под угрозой. Тёмные силы похитили твоего суженого Максимиана и похитили страницы из Главной Летописи вашего союза, чтобы предать вашу историю забвению. Без этих страниц магия вашей будущей свадьбы развеется. Ты должна восстановить Хронику Любви! Отправляйся в путь сквозь время, призови крылатых Серых Орлов по руническому номеру [+996 550 558 076] и скажи пароль «гномий брат».</div>
+        <div class="line-say">Евгений, при встрече:</div>
+        <div class="scroll">— Вы вызывали серого орла? Назовите пароль ещё раз.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Максим увезён Вором по заранее выбранному маршруту. Евгения и Анастасия уже мчат на ГЭС готовить Главу 1. Аля называет пароль Евгению и уезжает с ним к дому детства Максима.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="timebox">20:25 – 20:40</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 1 ================= -->
+    <section class="section" id="sec-ch1">
+      <h1 class="pagetitle"><span class="chnum">1</span>Родина витязя Максимиана</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">ГЭС-2, ул. Гоголя, 51</div><div class="note">Настоящий сундук закопан в том же дворе</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Аля впервые прикасается к истокам Максима — местам, где рос будущий Витязь. Она должна доказать, что знает не имя, а душу своего избранника, и почувствовать тепло узнавания: даже в детстве, которого она не видела, живёт тот человек, которого она любит.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Призрак Прошлого №1<span class="who">Исполнитель: Евгения</span></div>
+            <div class="cast-does">Встречает у ворот в образе, читает Свиток 1, организует ложную откопку.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Призрак Прошлого №2<span class="who">Исполнитель: Анастасия</span></div>
+            <div class="cast-does">Встречает у ворот, задаёт 12 вопросов о детстве Максима, оценивает ответы, определяет условие выдачи настоящей карты.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Мудрец у яблонь<span class="who">Исполнитель: Тая</span></div>
+            <div class="cast-does">Сидит среди яблонь на пути между испытаниями. Встречает Алю короткой загадочной фразой и жестом указывает путь дальше — создаёт атмосферу, в основной сюжет не вмешивается. <i>(Роль придумана по вашей просьбе — реплику можно менять свободно.)</i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля подходит к воротам, видит вывеску «Родина витязя Максимиана».</li>
+          <li>Произносит пароль: «Гномий брат».</li>
+          <li>Евгения и Анастасия (в образе) открывают ворота.</li>
+          <li>Евгения читает Свиток 1.</li>
+          <li>Але вручают фейковую карту с закопкой-обманкой.</li>
+          <li>Аля откапывает по фейковой карте — сундук пуст, внутри Свиток 2.</li>
+          <li>По подсказке из Свитка 2 идёт туда, «где гномы пьют хмельное» — к месту первого испытания.</li>
+          <li>По пути её может встретить Тая у яблонь.</li>
+          <li>Анастасия по очереди задаёт 12 вопросов о детстве Максима.</li>
+          <li>Хороший результат → сразу настоящая карта. Слабый результат → сначала мини-задание, потом карта.</li>
+          <li>По настоящей карте Аля находит место с лопатой (тот же двор) и откапывает настоящий сундук.</li>
+          <li>Забирает Свиток 3, едет дальше с Орлом.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+
+        <span class="scroll-label">Свиток 1 — читает Евгения у ворот</span>
+        <div class="scroll">"...И открылась первая глава Великой Летописи..."
+Знай, Хранительница...
+Ни одна история не начинается с великого подвига.
+Каждый витязь когда-то был мальчишкой, что бегал по этим тропам, мечтал о великих дорогах и ещё не ведал, какую судьбу ему уготовили Древние.
+Именно здесь зародился дух того, кого ныне называют Максимом.
+Здесь были сделаны первые шаги, одержаны первые маленькие победы и получены первые уроки, сделавшие его тем человеком, которого полюбило твоё сердце.
+Но Призраки Прошлого знали...
+Пока живы воспоминания — живо и само пророчество.
+Поэтому они пришли сюда раньше тебя.
+Они вырвали первую страницу Летописи и, опасаясь силы прошлого, скрыли её в самой земле, чтобы время и корни навеки поглотили память о начале пути Витязя.
+Но земля не забывает тех, кто приходит с чистым сердцем.
+Она хранит свои тайны лишь до тех пор, пока не явится истинная Хранительница.
+Сегодня древняя почва готова вернуть то, что было ей доверено. На этой священной земле ты уже однажды получала волшебные послания. Иди туда и найди то, что приведёт тебя к затерянной летописи.</div>
+
+        <span class="scroll-label">Свиток 2 — в ложном сундуке</span>
+        <div class="scroll">Ты действительно поверила, что первая страница достанется без испытания?
+Мы — Призраки Прошлого. Мы веками храним Летопись от тех, чьи сердца недостаточно сильны.
+Если ты называешь себя Хранительницей, докажи, что знаешь своего Витязя не по имени, а по его душе.
+Лишь тот, кто хранит память о каждом шаге своего избранника, достоин вернуть утраченную страницу.
+Отправляйся туда, где твои братья гномы иногда собираются, чтобы выпить хмельного. Там тебя уже ожидают Хранители с первым испытанием.
+Пройди его... и, быть может, земля откроет тебе свои настоящие тайны.</div>
+
+        <div class="line-say">Анастасия — 12 вопросов о детстве Максима</div>
+        <div class="quiz-item">
+          <ol class="steps">
+            <li>Хранительница, скажи нам... Какую вещь твой Витязь теряет чаще всего?</li>
+            <li>Какая привычка твоего Витязя может показаться другим немного странной?</li>
+            <li>Какую игрушку он больше всего любил в детстве?</li>
+            <li>Если бы Хранители могли избавить его от одного домашнего дела навсегда, что бы он выбрал?</li>
+            <li>Какого события в этом году он ждёт сильнее всего?</li>
+            <li>Что помогает твоему Витязю успокоиться, когда его сердце тревожно?</li>
+            <li>Какую начинку для пиццы он всегда выберет первой?</li>
+            <li>Кем мечтал стать твой Витязь, когда был ребёнком?</li>
+            <li>Какой подарок он считает самым ценным в своей жизни?</li>
+            <li>Какая семейная традиция для него самая любимая?</li>
+            <li>Какое домашнее блюдо он любит больше всего?</li>
+            <li>И последний вопрос, Хранительница... Какое воспоминание о вас двоих твой Витязь считает самым дорогим для своего сердца?</li>
+          </ol>
+        </div>
+        <div class="note-open"><b>Ответы Макса:</b> пока не собраны — оставлено пустым, заполнить в карточках Хранителя до мероприятия.</div>
+
+        <div class="line-say">Мини-задание при слабом ответе (если ответы хранителей не устроят)</div>
+        <div class="scroll">«Хранители Гномьего Погреба»: Аля должна трижды громко произнести пароль «Гномий брат!» — каждый раз другим голосом (грозным / шёпотом / нараспев) — под одобрительный гул Хранителей. После третьего раза карта выдаётся.
+<span style="color:var(--ink-faint); font-size:12px;">(Предложенный вариант взамен «10 прыжков на одной ноге» — можно заменить своим.)</span></div>
+
+        <div class="line-say">Мудрец у яблонь (Тая) — примерная реплика</div>
+        <div class="scroll">«Эти яблони помнят его мальчишкой больше, чем помнят Хроники. Ступай, Хранительница, — корни укажут путь».
+<span style="color:var(--ink-faint); font-size:12px;">(Придумано — меняйте свободно под характер исполнительницы.)</span></div>
+
+        <span class="scroll-label">Свиток 3 — в настоящем сундуке</span>
+        <div class="scroll">Первое испытание пройдено.
+Ты прикоснулась к истокам своего Витязя, прошла проверку Хранителей и вернула первую утраченную страницу Великой Летописи.
+Но это лишь начало пути. Призраки Прошлого уже унесли остальные страницы дальше, надеясь запутать твои следы и не позволить тебе добраться до Максима.
+Не медли, Хранительница. Возвращайся к своему Орлу — верному проводнику между главами этой истории.
+Он уже знает, куда вести тебя дальше.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Евгения и Анастасия уезжают готовить Главу 5 (та же квартира, что и место похищения). Аля садится в машину к Орлу (Евгений) и едет к Дому детства Али.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 2 ================= -->
+    <section class="section" id="sec-ch2">
+      <h1 class="pagetitle"><span class="chnum">2</span>Дом детства Али</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Аламедин-1, дом 35</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Аля возвращается туда, откуда началась она сама. Она должна вспомнить своё детство и доказать, что помнит собственные истоки так же бережно, как истоки Максима.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Хранительница памяти (мама Али)<span class="who tbd">Исполнитель: уточняется</span></div>
+            <div class="cast-does">Встречает Алю, читает Свиток 2, принимает финальное обещание, выдаёт второй сундук.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Помощник мамы Али<span class="who tbd">Исполнитель: уточняется</span></div>
+            <div class="cast-does">Молодой человек, знает весь сценарий целиком; подстраховывает маму по необходимости.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Техконтроль<span class="who">Исполнитель: Лера</span></div>
+            <div class="cast-does">Включает аудио, регулирует громкость, устраняет неполадки на локации. Не действующее лицо квеста.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля заходит в квартиру.</li>
+          <li>Хранительница памяти читает Свиток 2.</li>
+          <li>Аля ищет по квартире 3 сосуда памяти, спрятанных среди вещей.</li>
+          <li>Сосуд 1 «Чаша подлинных знаков» — тест с вариантами ответов.</li>
+          <li>Сосуд 2 «Сосуд Ложной Памяти» — находит одно ложное воспоминание среди списка фактов.</li>
+          <li>Сосуд 3 «Ларец Детских Тайн» — разгадывает 3 загадки о предметах.</li>
+          <li>За каждый пройденный сосуд получает часть текста (листочек).</li>
+          <li>Собрав все три листочка, вслух произносит Хранительнице памяти текст-обещание.</li>
+          <li>Получает второй сундук со свитком.</li>
+          <li>Уезжает к Орлу.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+
+        <span class="scroll-label">Свиток 2 — открывает главу</span>
+        <div class="scroll">«И открылась вторая глава Великой Летописи…»
+Знай, Хранительница…
+Прежде чем судьба привела тебя к Витязю, твой собственный путь уже был начертан в этих стенах.
+Здесь прозвучал твой детский смех. Здесь родились первые мечты, были совершены первые шалости и получены уроки, сделавшие тебя той, кому однажды доверят судьбу всей Летописи.
+Но Призраки Прошлого проникли и сюда.
+Они разделили воспоминания о твоём детстве и заточили их в трёх Сосудах Памяти, спрятав сосуды среди знакомых вещей.
+Найди каждый из них.
+Открой хранящиеся внутри тайны и докажи, что годы не стёрли дорогу к твоему собственному началу.
+За каждое пройденное испытание ты получишь часть древнего послания.
+Лишь соединив три части воедино, ты сможешь прочесть загадку, указывающую путь к сундуку, где сокрыта следующая страница Хроники.
+Но будь внимательна:
+Призраки умеют прятать истину среди самых обычных вещей.
+Ступай, Хранительница.
+Верни свои воспоминания.
+Ведь тот, кто не помнит собственного начала, не сможет спасти общее будущее.</div>
+
+        <div class="line-say">Сосуд 1 — «Чаша подлинных знаков» (5 вопросов, выбрать один ответ из трёх)</div>
+        <div class="quiz-item"><div class="q">1. Ты так спешила увидеть этот мир, что решила появиться на свет немного раньше срока. На какой неделе это произошло?</div>
+          <ol class="opts" type="А"><li>На 35-й</li><li class="correct">На 37-й ✓</li><li>На 40-й, просто очень быстро выросла</li></ol></div>
+        <div class="quiz-item"><div class="q">2. Когда был сделан самый первый официальный снимок будущей невесты?</div>
+          <ol class="opts" type="А"><li>1 января 2002 года</li><li class="correct">19 января 2002 года ✓</li><li>В день выписки из роддома</li></ol></div>
+        <div class="quiz-item"><div class="q">3. Сколько весила эта маленькая, но уже очень перспективная невеста?</div>
+          <ol class="opts" type="А"><li>2500 г</li><li class="correct">3000 г ✓</li><li>3500 г</li></ol></div>
+        <div class="quiz-item"><div class="q">4. В какое время мир официально познакомился с тобой?</div>
+          <ol class="opts" type="А"><li>08:20</li><li class="correct">18:20 ✓</li><li>23:20</li></ol></div>
+        <div class="quiz-item"><div class="q">5. А какого роста была эта будущая покорительница сердец?</div>
+          <ol class="opts" type="А"><li>46 см</li><li class="correct">49 см ✓</li><li>52 см</li></ol></div>
+
+        <div class="line-say">Сосуд 2 — «Сосуд Ложной Памяти» (найти одно событие, которого никогда не было)</div>
+        <div class="quiz-item">
+          <ul class="fact-list">
+            <li>Первое слово — «баба» (мама было вторым словом)</li>
+            <li>Ветрянкой заболела в 5 лет</li>
+            <li class="fake">Любимым овощем была морковка — выдуманный факт, этого не было</li>
+            <li>Титул «мисс красотка» в Дзержинце</li>
+            <li>1 место по стрельбе из винтовки</li>
+            <li>Первый зуб выпал в 7 лет</li>
+            <li>Первый зуб вырос в 10 месяцев</li>
+            <li>Разница между тем, как научилась ползать и как пошла — 1 неделя</li>
+            <li>В детстве ставили плоскостопие</li>
+          </ul>
+          <div class="note-open"><b>Для Хранителя:</b> зачитывать список без пометок ниже. Ложный факт — про морковку. Исходные черновые пометки автора (для сверки формулировок): первое слово — не «мама», а «баба»; ветрянка была в 5 лет, а не в 4.</div>
+        </div>
+
+        <div class="line-say">Сосуд 3 — «Ларец Детских Тайн» (3 загадки о предметах)</div>
+        <div class="riddle"><div class="verse">Не котёнок, не енот,
+И совсем не кашалот.
+Ты придумала сама
+Имя чудное тогда.
+Кто скрывался в слове том,
+Что звучало «Бемагот»?</div><div class="ans">Ответ: мыло «Бегемот»</div></div>
+        <div class="riddle"><div class="verse">Червяка и крокодила
+Ты искусно мастерила.
+Вспомни детские года —
+Из чего они тогда?</div><div class="ans">Ответ: бисер</div></div>
+        <div class="riddle"><div class="verse">На гимнастике когда-то
+Ты старалась, так как надо.
+Грамота была в руках...
+Что ещё несла в призах?</div><div class="ans">Ответ: набор кружек</div></div>
+
+        <div class="line-say">Текст-обещание (собранный из трёх листочков — это и есть сама загадка)</div>
+        <div class="scroll">Чтобы получить второй сундук, дай Хранителю обещание: никогда не забывать свои истоки и своё прошлое, ценить их за то, что они сделали тебя той, кем ты стала сегодня, и поблагодарить маленькую себя за весь пройденный путь.</div>
+
+        <span class="scroll-label">Свиток в сундуке — конец главы</span>
+        <div class="scroll">Второе испытание пройдено.
+Теперь ты вспомнила не только истоки своего Витязя, но и прикоснулась к собственным корням — к тому месту, где началась твоя история и где родилась та девочка, которой однажды суждено было стать Хранительницей Летописи.
+Ты вернула ещё одну утраченную страницу, но путь продолжается.
+Не медли. Возвращайся к своему Орлу — он уже расправил крылья и знает, куда вести тебя дальше.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Хранительница памяти и Помощник остаются на локации. Лера выключает оборудование и едет готовить следующую точку. Аля едет дальше с Орлом.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 3 ================= -->
+    <section class="section" id="sec-ch3">
+      <h1 class="pagetitle"><span class="chnum">3</span>Дорога</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">В машине, в движении</div><div class="note">Точка назначения — ул. Токтоналиева, 96</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>В движении, без внешних декораций, Аля должна вслух заново пережить историю своей любви — открыться и произнести её целиком, чтобы разрушить чары молчания, наложенные на её проводника.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Призрак Прошлого (голос)<span class="who">Заранее записанная аудиодорожка</span></div>
+            <div class="cast-does">Звучит из динамиков машины, задаёт вопросы с паузами между ними.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Лера<span class="who">Исполнитель: Лера</span></div>
+            <div class="cast-does">Управляет воспроизведением аудиодорожки — включает следующий трек, когда чувствует, что Аля закончила отвечать на вопрос.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Крылатый Орёл / водитель<span class="who">Исполнитель: Евгений</span></div>
+            <div class="cast-does">За рулём молчит («под заклятием»), не разговаривает с Алей до кодовой фразы.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>В машине включается аудиозапись голоса Призрака Прошлого.</li>
+          <li>Голос объясняет условие: водитель молчит, пока Аля не расскажет историю их любви целиком.</li>
+          <li>Аудио задаёт вопросы по очереди с паузами; Лера включает следующий трек, когда чувствует завершение ответа.</li>
+          <li>Аля отвечает вслух на все вопросы.</li>
+          <li>Аля произносит кодовую фразу: «Моя история рассказана. Любовь сильнее ваших чар».</li>
+          <li>Заклятие снимается — водитель снова говорит, Аля получает потерянную страницу.</li>
+          <li>Машина прибывает на Токтоналиева, 96 — начинается Глава 4 на том же месте.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Аудиодорожка — вступление и вопросы</span>
+        <div class="scroll">Приветствую тебя, Хранительница Летописи.
+Я — один из Призраков Прошлого. Именно мы похитили страницы вашей истории, чтобы пророчество никогда не сбылось.
+Одна из потерянных страниц находится у меня. На ней записано самое начало вашей любви — глава о том, как среди множества дорог вы однажды нашли друг друга....
+Сейчас дорога скрыта моими чарами, а на твоего водителя наложено заклятие. Пока испытание не будет завершено, он не сможет говорить с тобой и не сможет доставить тебя к следующей главе.
+Чтобы вернуть страницу, тебе придётся открыть своё сердце и рассказать вашу историю.
+Не жди моих вопросов и не жди ответа. Начинай говорить сама и не останавливайся, пока не расскажешь всё, что хранит твоя память. Я буду внимательно слушать каждое твоё слово.....
+Не скупись на подробности и тёплые слова. Позволь себе вновь прожить эту главу — вспомнить волнение, радость и тот огонь, который однажды зажёгся между вами. Поблагодари судьбу за вашу встречу и за всё, что вы уже успели пройти вместе.
+Помни: страницы можно похитить, дорогу можно скрыть, но искренняя любовь разрушает самые сильные чары. Вспомни ваши первые разговоры, встречи, взгляды и первые признания в любви.
+На последнем вопросе, когда почувствуешь, что рассказала всё, произнеси:
+«Моя история рассказана. Любовь сильнее ваших чар».
+Тогда заклятие будет разрушено, водитель вновь сможет говорить с тобой, а потерянная страница вернётся в твои руки.
+А теперь начинай, Хранительница…
+
+Как началась ваша история любви? [пауза — Лера ждёт ответа]
+Расскажи, как вы познакомились? [пауза]
+Каким Максим показался тебе при первой встрече? [пауза]
+Что ты тогда подумала и почувствовала? [пауза]
+Когда поняла, что он становится для тебя особенным? [пауза]
+Когда и как ты поняла, что полюбила его?</div>
+        <div class="line-say">Аля произносит (кодовая фраза, снимает заклятие):</div>
+        <div class="scroll">«Моя история рассказана. Любовь сильнее ваших чар».</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Водитель (Евгений) снова заговаривает с Алей, страница считается возвращённой. Машина прибывает на Токтоналиева, 96, где сразу начинается Глава 4.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 4 ================= -->
+    <section class="section" id="sec-ch4">
+      <h1 class="pagetitle"><span class="chnum">4</span>Первый Очаг</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Улица Токтоналиева, 96</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Аля вспоминает не громкие события, а простые совместные вечера — первый настоящий дом, который они делили с Максимом, и то, из чего рождается настоящий уют.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Хранитель / встречающая<span class="who">Исполнитель: Лера-рыжая</span></div>
+            <div class="cast-does">Встречает Алю в мантии, читает вступительный текст, достаёт карточки и зачитывает 4 вопроса испытания «Осколки памяти».</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля приезжает, её встречает Лера-рыжая в мантии.</li>
+          <li>Лера-рыжая читает вступительный текст главы.</li>
+          <li>Достаёт карточки испытания «Осколки памяти».</li>
+          <li>Задаёт 4 вопроса по очереди.</li>
+          <li>После каждого верного ответа — короткий комментарий.</li>
+          <li>По завершении Аля получает Свиток в сундуке.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Вступительный текст</span>
+        <div class="scroll">"...И было сказано в Летописи:
+Дом — это не стены.
+Дом рождается там, где два сердца впервые делят один стол, один вечер, одну радость и одну грусть.
+Именно здесь появились первые страницы общей истории.
+Но Призраки Прошлого попытались стереть даже эти воспоминания.
+Они оставили лишь осколки памяти.
+Собери их воедино...
+Докажи, что ты помнишь не только великие события, но и самые простые мгновения. Ведь именно из них рождается настоящая любовь."</div>
+
+        <div class="line-say">Испытание «Осколки памяти» — карточки</div>
+        <div class="quiz-item"><div class="q">🍣 Вопрос 1. Какая еда навсегда осталась в вашей общей истории, потому что исчезла из города?</div>
+        <p style="margin:0"><b>Ответ:</b> Суши-дог из Фрешбокса.</p>
+        <p style="margin:6px 0 0; color:var(--ink-soft); font-size:12.5px;">После ответа: «Даже исчезнувшие места продолжают жить в памяти тех, кто делил в них счастливые вечера».</p></div>
+        <div class="quiz-item"><div class="q">🍔 Вопрос 2. Как назывался фастфуд, куда вы любили ходить за куриными бургерами?</div>
+        <p style="margin:0"><b>Ответ:</b> «ФСБиш» (или как реально произносится).</p></div>
+        <div class="quiz-item"><div class="q">🏪 Вопрос 3. Как назывался магазин возле дома, который особенно нравился Максиму?</div>
+        <p style="margin:0"><b>Ответ:</b> «Добрый».</p></div>
+        <div class="quiz-item"><div class="q">🍫 Вопрос 4. Какой детский десерт неожиданно стал частью вашей общей истории благодаря странным традициям?</div>
+        <p style="margin:0"><b>Ответ:</b> Киндер Сюрприз.</p></div>
+
+        <span class="scroll-label">Свиток в сундуке — конец главы</span>
+        <div class="scroll">Четвёртое испытание пройдено.
+Ты разрушила чары Призраков Прошлого и освободила своего верного Орла от наложенного на него проклятия.
+А затем собрала осколки памяти и вернула Летописи ещё одну часть вашей общей истории — ту, что родилась из простых вечеров, общих радостей и первых мгновений настоящего дома.
+Но путь ещё не окончен. Возвращайся к своему Орлу — теперь он вновь свободен и готов нести тебя к следующей главе.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Лера-рыжая остаётся на локации. Аля возвращается к Орлу (Евгений), который снова свободно разговаривает с ней всю дорогу. Едут к Главе 5.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 5 ================= -->
+    <section class="section" id="sec-ch5">
+      <h1 class="pagetitle"><span class="chnum">5</span>Заклятье Глупых Гномов</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Аламедин-1, дом 91</div><div class="note">Общая квартира Али и Максима — та же, где его похитили в Прологе</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Аля возвращается в свой собственный дом, который «заколдовали» гномы, устроив беспорядок. Она должна доказать, что дом принадлежит именно ей — она знает каждый его уголок.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Гном, читает текст<span class="who">Исполнитель: Анастасия</span></div>
+            <div class="cast-does">Зачитывает вступительный текст про Заклятье Великого Беспорядка.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Гном, прячет предметы<span class="who">Исполнитель: Евгения</span></div>
+            <div class="cast-does">Заранее, до приезда Али, прячет предметы по квартире согласно гномьим рисункам-подсказкам.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Лера<span class="who">Исполнитель: Лера</span></div>
+            <div class="cast-does">Пока идёт эта глава, уезжает вперёд готовить следующую локацию.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля заходит в квартиру.</li>
+          <li>Анастасия читает вступительный текст.</li>
+          <li>Аля находит по гномьим рисункам разбросанные предметы и возвращает их на места.</li>
+          <li>По ходу находит записку от гномов.</li>
+          <li>Возвращает все предметы — испытание пройдено.</li>
+          <li>Получает Свиток в сундуке.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Вступительный текст — читает Анастасия</span>
+        <div class="scroll">"...И когда Призраки Прошлого увидели, что Хранительница становится всё ближе к спасению Витязя, они обратились за помощью к самым неуклюжим существам во всём королевстве...
+Глупым Гномам.
+Конечно, ни один уважающий себя маг не согласился помогать Призракам.
+Поэтому им пришлось нанять гномов.
+А всем известно...
+Гномы великолепно копают.
+Но совершенно ужасно колдуют.
+Им было велено наложить Заклятье Великого Беспорядка на предметы вашего дома и оставить подсказки, чтобы никто не смог вернуть всё обратно.
+Вот только возникла одна маленькая проблема...
+У гномов слишком короткие пальцы, тяжёлые молоты и удивительно кривые руки.
+Поэтому вместо древних рун они оставили... какие-то ужасные каракули.
+Похоже, их рисовал какой-то очень неуклюжий гном...
+Но, к счастью, даже самые нелепые рисунки могут понять те, кто по-настоящему знает свой Дом.
+Найди предметы, которые заклятье разбросало по жилищу.
+Верни каждого маленького беглеца на его законное место.
+И тогда Дом вновь вспомнит своих хозяев, а Призраки потеряют ещё часть своей силы."</div>
+
+        <span class="scroll-label">Записка от гномов — найти в квартире</span>
+        <div class="scroll">Дорогие Призраки!
+Мы всё сделали!
+Правда, забыли, куда сами перепрятали половину вещей...
+Зато картинки красивые нарисовали.
+Наверное.
+С уважением, Гном Брынь, Гном Шмяк и Гном Ой.</div>
+
+        <span class="scroll-label">Свиток в сундуке — конец главы</span>
+        <div class="scroll">Пятое испытание пройдено.
+Ты разрушила Заклятье Великого Беспорядка, вернула потерянные вещи на свои места и помогла Дому вновь вспомнить своих хозяев.
+Даже Глупые Гномы не смогли запутать ту, которая по-настоящему знает свой Дом и хранит память о каждом его уголке.
+Вместе с восстановленным порядком к тебе вернулась ещё одна утраченная часть Летописи.
+Но Призраки Прошлого уже скрылись дальше и готовят новое испытание.
+Не медли, Хранительница. Возвращайся к своему Орлу.</div>
+
+        <div class="note-open"><b>Не готово:</b> точный список предметов и сами гномьи рисунки-подсказки ещё не составлены — прислать отдельно, когда будут готовы.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Евгения и Анастасия уезжают дальше. Аля возвращается к Орлу и едет к Главе 6.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 6 ================= -->
+    <section class="section" id="sec-ch6">
+      <h1 class="pagetitle"><span class="chnum">6</span>Перекрёсток</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Аламедин-1, дом 35</div><div class="note">Дом верных друзей — тот же дом, что и Глава 2 (дом мамы Али), другая квартира</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Аля вновь проживает момент, когда стояла на распутье между двумя дорогами — уехать в Турцию или остаться ради любви к Максиму. Она должна не выбирать заново, а признать: обе дороги — часть её истории, и разрезать нужно лишь нить сомнения.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Женя — Хранитель Далёкой Дороги<span class="who">Исполнитель: Евгения</span></div>
+            <div class="cast-does">Встречает на синей дороге (Турция), проверяет порядок знаков, задаёт загадку про «Смелость», вручает конверт и указывает на чемодан.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Хранитель Пути Сердца<span class="who">Исполнитель: Лера</span></div>
+            <div class="cast-does">Встречает на красной дороге (Максим/сердце), принимает собранную фразу из 4 конвертов, вручает шкатулку с Талисманом Сердца.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля прибывает, читает Свиток на входе и записку у перекрёстка.</li>
+          <li>Видит развилку: синяя дорога (Турция) и красная дорога (Максим) — проходит обе, не выбирая.</li>
+          <li><b>Дорога I:</b> расставляет 5 знаков по порядку (лампочка → танец → Турция → письмо → галочка), показывает Жене.</li>
+          <li>Женя даёт конверт с загадкой про «Смелость» — Аля отгадывает.</li>
+          <li>Открывает чемодан, забирает Талисман Смелости и записку.</li>
+          <li><b>Дорога II:</b> идёт по красной нити, собирает 4 конверта со словами.</li>
+          <li>Складывает фразу «СЕРДЦЕ УЖЕ СДЕЛАЛО СВОЙ ВЫБОР», показывает Лере.</li>
+          <li>Открывает шкатулку — забирает Талисман Сердца, фото, записку.</li>
+          <li>Возвращается к Жене и Лере с двумя талисманами — видит сундук с двумя нитями.</li>
+          <li>Разрезает только тёмную нить (нить сомнения), открывает сундук.</li>
+          <li>Читает финальный Свиток — узнаёт про «Логово Серого Кардинала» и должна сама назвать адрес водителю.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+
+        <span class="scroll-label">Свиток на входе</span>
+        <div class="scroll">— Приветствую тебя, Хранительница Летописи.
+Ты прибыла к дому своих верных друзей — тех, кто однажды помог тебе не свернуть с предназначенного пути, заглушить голос сомнений и услышать зов собственного сердца.
+В те дни перед тобой открылись две дороги. Первая звала тебя к далёким берегам Турции — к сцене, танцам и новой жизни, к которой ты уже была готова. Письма были отправлены, приглашение получено, и путь казался решённым.
+Но внезапно появилась вторая дорога. На ней тебя ждал Максим — человек, которого ты не искала, но которого выбрало твоё сердце.
+Ты долго стояла на перекрёстке, не зная, какой путь станет твоим. И тогда рядом оказались твои верные друзья, которые помогли тебе увидеть свет среди сомнений.
+Помни:
+Настоящие друзья не выбирают путь за тебя. Они лишь зажигают свет, когда ты перестаёшь видеть дорогу.
+Призраки Прошлого попытались стереть этот выбор из Летописи. Они разделили воспоминание на две дороги и связали потерянную страницу Нитью Сомнения.
+Чтобы освободить страницу, тебе предстоит пройти обе дороги и вновь прикоснуться к тому выбору, который однажды изменил всю вашу историю.
+На каждом пути тебя будет ждать свой знак. Найди два талисмана — талисман смелости и талисман выбранного сердца.
+Лишь когда оба окажутся в твоих руках, Хранители Перекрёстка признают испытание пройденным и позволят тебе приблизиться к сундуку с потерянной страницей.
+Ступай, Хранительница.
+Вспомни обе дороги — и верни Летописи выбор, благодаря которому ваша любовь продолжилась.</div>
+
+        <span class="scroll-label">Записка у перекрёстка</span>
+        <div class="scroll">Когда-то перед тобой открылись две дороги. Одна звала тебя к далёким берегам, другая — к любви, появившейся тогда, когда ты меньше всего её ждала.
+Сегодня тебе не нужно выбирать снова. Пройди обе дороги, найди два утраченных знака и принеси их Хранителям Перекрёстка.
+Только тогда исчезнет последняя преграда между тобой и страницей Летописи.</div>
+
+        <div class="line-say">Дорога I. Путь к далёким берегам</div>
+        <div class="scroll">Перед тобой пять знаков Далёкой Дороги.
+Расположи их в правильном порядке — от зарождения мечты до готовности отправиться в путь.
+Когда последовательность будет восстановлена, покажи её Хранителю Далёкой Дороги.
+Только тогда он позволит тебе пройти дальше.</div>
+        <div class="quiz-item"><b>Знаки по порядку:</b> лампочка → танец → Турция → письмо → галочка</div>
+
+        <div class="scroll">Женя, если порядок верный: — Ты верно восстановила Дорогу к далёким берегам. Но правильного порядка недостаточно. Чтобы пройти дальше, тебе нужно назвать силу, которая однажды помогла тебе решиться оставить привычную жизнь и сделать шаг навстречу неизвестности.
+Отгадай загадку: Ты была готова улететь в другую страну, начать новую жизнь и не отступить перед неизвестностью. Эта сила начинается на букву «С» и помогает действовать, даже когда страшно. Назови её.
+
+Ответ: Смелость.
+
+Женя: — Верно. Смелость была твоим первым билетом в неизвестность. Подойди к чемодану и открой его — внутри хранится сила, которую оставила тебе несбывшаяся мечта.</div>
+
+        <span class="scroll-label">Записка в чемодане</span>
+        <div class="scroll">Эта дорога не была ошибкой.
+Она подарила тебе смелость мечтать, решимость изменить свою жизнь и готовность отправиться в неизвестность.
+Даже дороги, по которым мы не пошли, навсегда остаются частью нас.
+Возьми Талисман Смелости и сохрани его до возвращения на Перекрёсток.</div>
+
+        <div class="line-say">Дорога II. Путь Сердца</div>
+        <div class="scroll">Перед тобой Путь Сердца.
+Следуй за красной нитью и найди все четыре конверта. В каждом из них скрыта часть фразы.
+Собери найденные слова и расположи их в правильном порядке, чтобы восстановить истинное послание сердца.
+Покажи готовую фразу Лере — Хранителю Пути Сердца.
+Только тогда она позволит тебе пройти дальше.</div>
+
+        <div class="quiz-item"><b>Конверт 1 «Неожиданная встреча»:</b> Ты не искала новой любви. Но именно тогда Судьба привела к тебе Максима. — Фрагмент: <b>СЕРДЦЕ</b></div>
+        <div class="quiz-item"><b>Конверт 2 «Сомнение»:</b> Одна дорога уже была выбрана разумом. Но другая незаметно начала прорастать внутри тебя. — Фрагмент: <b>УЖЕ</b></div>
+        <div class="quiz-item"><b>Конверт 3 «Свет друзей»:</b> Когда ты перестала понимать, куда идти, рядом оказались люди, которые увидели то, что ты боялась признать. — Фрагмент: <b>СДЕЛАЛО</b></div>
+        <div class="quiz-item"><b>Конверт 4 «Выбор»:</b> Они не могли решить за тебя. Они лишь напомнили, что настоящую любовь легко потерять, если слишком долго стоять на перекрёстке. — Фрагмент: <b>СВОЙ ВЫБОР</b></div>
+
+        <div class="scroll">Лера, когда фраза собрана: — Истинные слова восстановлены. Ты осталась не потому, что перестала мечтать, а потому, что услышала собственное сердце. Путь Сердца признал тебя. Подойди к шкатулке и прими его дар.</div>
+
+        <span class="scroll-label">В шкатулке: Талисман Сердца, фотография Али и Максима, записка</span>
+        <div class="scroll">Эта дорога появилась внезапно, но именно она стала началом вашей общей истории.
+Ты не отказалась от мечты. Ты выбрала любовь, которая оказалась сильнее расстояния, страха и сомнений.
+Возьми Талисман Сердца и отнеси оба талисмана хранителям перекрёстка в самое начало пути.</div>
+
+        <div class="line-say">Финал локации — Нить Сомнения</div>
+        <div class="field-body"><p>Аля возвращается к Жене и Лере с двумя талисманами. Перед ними — сундук, перевязанный двумя нитями: красная нить (любовь Али и Максима) и тёмная/серая нить (сомнения). На нитях висит свиток:</p></div>
+        <div class="scroll">Смелость дала тебе силу посмотреть в лицо неизвестности. А сердце помогло понять, ради какой дороги стоит остаться.
+Обе дороги навсегда остались частью твоей истории. Одну из них не нужно уничтожать, разрежь лишь ту, что мешала тебе услышать собственное сердце.
+Освободи Летопись от Нити Сомнения. Разрежь только тёмную нить и открой сундук.</div>
+
+        <span class="scroll-label">Свиток в сундуке — конец главы</span>
+        <div class="scroll">Ты преодолела все дороги, выдержала каждое испытание и собрала воедино утраченную историю.
+Но последнее испытание ещё впереди. Тебе предстоит проникнуть в самое логово зла и вырвать своего Рыцаря из цепких рук врага.
+Ты уже совсем близко, Хранительница. Теперь от тебя зависит, будет ли ваша Летопись завершена.
+Тайна раскрыта: твоего Рыцаря держат в Логове Серого Кардинала.
+Но крылатый орёл не сможет доставить тебя туда, пока ты сама не назовёшь точный адрес.
+Ищи не среди высоких башен и множества чужих дверей. Логово находится там, где нет квартир и подъездов, где за собственными воротами стоит отдельный дом.
+Вспомни, кто из твоих спутниц незримо направлял это приключение, связывал все нити и оставался в тени. Именно её родные стены стали последним убежищем Призраков Прошлого.
+Когда поймёшь, о каком месте идёт речь, скажи водителю:
+«Я знаю, где находится Логово Серого Кардинала», — и сама назови адрес.
+Ты почти добралась до Максима. Между вами осталась лишь последняя дорога.
+Поспеши, Хранительница. Твой Рыцарь ждёт спасения.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Женя и Лера остаются/уезжают. Аля садится в машину, сама произносит фразу «Я знаю, где находится Логово Серого Кардинала» и называет адрес (Джакыпова, 34А — дом Анастасии, район Дордой). Орёл везёт её туда.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span>
+      </div>
+    </section>
+
+    <!-- ================= ГЛАВА 7 ================= -->
+    <section class="section" id="sec-ch7">
+      <h1 class="pagetitle"><span class="chnum">7</span>Последняя страница Летописи</h1>
+
+      <div class="field">
+        <div class="field-label">📍 Локация</div>
+        <div class="loc-box"><div class="addr">Улица Джакыпова, 34А</div><div class="note">Дом Анастасии, район Дордой — поляна с деревом. Сюда же ближе к финалу могут подтягиваться остальные участники.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл главы</div>
+        <div class="field-body"><p>Финальное испытание и главная кульминация. Аля сама, своими руками, освобождает своего Витязя и откапывает последнюю страницу их истории. Она должна почувствовать: только она — Хранительница Летописи, и только ей суждено закончить эту историю.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Максим — Витязь<span class="who">Исполнитель: Максим</span></div>
+            <div class="cast-does">Стоит привязанный к дереву. После освобождения обнимает Алю, рассказывает, где закопана последняя страница, стоит рядом, пока Аля сама копает; в финале надевает Але фату.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Последний Страж<span class="who">Исполнитель: Андрей</span></div>
+            <div class="cast-does">Охраняет Максима. Устраивает шуточный бой с Алей на безопасном оружии, поддаётся, после нескольких попаданий падает, произносит реплику и убегает.</div>
+          </div>
+        </div>
+        <div class="note-open"><b>Не бой всерьёз:</b> выдать смешное оружие — поролоновые мечи, огромные ватные палки, лапша для бассейна, мягкие молоты. Страж специально поддаётся, делает смешные выпады.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля приходит на поляну, видит Максима у дерева и Стража рядом.</li>
+          <li>Зачитывается вступительный Свиток «Последняя Глава».</li>
+          <li>Але выдают шуточное оружие для боя со Стражем.</li>
+          <li>Проходит шуточный бой — Страж поддаётся, после нескольких попаданий падает.</li>
+          <li>Страж произносит финальную реплику и убегает.</li>
+          <li>Аля отвязывает Максима, они обнимаются.</li>
+          <li>Максим рассказывает, что видел, где Призраки закопали последнюю страницу, ведёт Алю к месту.</li>
+          <li>У места уже лежит лопата — Максим стоит рядом, не копает.</li>
+          <li>Аля сама откапывает сундук.</li>
+          <li>В сундуке — страница и белая фата.</li>
+          <li>Аля читает финальный Свиток-приглашение.</li>
+          <li>Максим берёт фату и надевает её на Алю.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+
+        <span class="scroll-label">Вступительный свиток «Последняя Глава»</span>
+        <div class="scroll">"...И вот Хранительница дошла до Последней Страницы.
+Призраки Прошлого были почти побеждены.
+Их чары ослабли.
+Их ложь рассыпалась.
+Но древний закон гласит...
+Пока Последний Страж стоит на своём посту, пророчество не может исполниться.
+Освободи Витязя.
+Ибо любовь никогда не приходит без последнего испытания."</div>
+
+        <div class="line-say">Страж перед уходом (после поражения)</div>
+        <div class="scroll">— Вы победили...
+Но вы всё равно опоздали...
+Последняя страница уже никогда не будет найдена... [убегает]</div>
+
+        <div class="line-say">Максим — после освобождения</div>
+        <div class="scroll">— Когда меня увели Призраки, я видел кое-что...
+Они долго спорили.
+Потом один из них сказал:
+"Закопайте Последнюю Страницу там, где никто не станет искать."
+Я видел это место.
+Пойдём.
+Кажется... ещё не всё потеряно.</div>
+
+        <span class="scroll-label">Последний свиток — из сундука</span>
+        <div class="scroll">Поздравляем, Хранительница.
+Ты восстановила Летопись.
+Ты вернула утраченную историю.
+Ты доказала, что любовь сильнее времени...
+Но впереди тебя ждёт ещё одно древнее испытание.
+Перед тем как соединятся два сердца, Хранительница должна пройти Совет Дев.
+Там её ждут смех...
+мудрые наставления...
+испытания...
+и последние приготовления перед Великим Союзом.</div>
+
+        <div class="line-say">Приглашение (красивым шрифтом, лежит под фатой)</div>
+        <div class="scroll" style="text-align:center; font-size:20px; letter-spacing:.03em;">13 August
+18:00
+Holiday House</div>
+
+        <div class="line-say">Максим, надевая фату</div>
+        <div class="scroll">— Кажется...
+Теперь ты готова к следующей главе нашей истории.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается глава</div>
+        <div class="end-box"><span class="mark">✦</span><div>Квест окончен. Андрей остаётся на локации. Максим и Аля отправляются на Совет Дев — Holiday House, 13 августа, 18:00. Начинается основной девичник.</div></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">⏱ Примерное время</div>
+        <span class="chip warn">Уточняется</span> — переход к Совету Дев зафиксирован на <span class="timebox">18:00</span>
+      </div>
+    </section>
+
+    <!-- ================= ROLE PAGES ================= -->
+
+    <section class="section" id="sec-role-evgeniy">
+      <h1 class="pagetitle">Евгений — Серый / Крылатый Орёл</h1>
+      <p class="subtitle">Сквозная роль — водитель Али на протяжении всего квеста</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Пролог<span class="loc">Аламедин-1, д.91 · 20:25</span></div>
+          <div class="rp-ch-body"><p>Днём заранее занавесить заднее окно машины шторкой — Аля не должна видеть маршрут. Быть на месте в 20:25, до похищения Максима. После похищения подойти к Але и спросить: «Вы вызывали серого орла? Назовите пароль ещё раз». Дождаться пароля «гномий брат», везти к Гоголя, 51.</p>
+            <div class="rp-remember"><b>Помнить:</b> до этого момента вы с Алей не знакомы по сюжету — вы просто примчавшийся «Орёл».</div></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 1 → 2<span class="loc">Гоголя 51 → Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Забрать Алю после откопки сундука в Главе 1, отвезти к дому мамы Али.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 3<span class="loc">в машине → Токтоналиева, 96</span></div>
+          <div class="rp-ch-body"><p>Ключевая сцена: вы «под заклятием» — молчите за рулём, пока не прозвучит аудиодорожка Призрака Прошлого и Аля не расскажет всю историю любви. Не заговаривайте, не реагируйте, пока Аля не произнесёт: «Моя история рассказана. Любовь сильнее ваших чар». После этой фразы — заклятие снято, снова разговариваете с ней как обычно.</p>
+            <div class="rp-remember"><b>Помнить:</b> Лера в машине управляет аудиодорожкой — ориентируйтесь на неё, когда включается следующий вопрос.</div></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 4<span class="loc">Токтоналиева, 96</span></div>
+          <div class="rp-ch-body"><p>После испытания у Леры-рыжей — по свитку «освобождены от проклятия», снова свободно общаетесь с Алей всю дорогу.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Главы 5–6<span class="loc">Аламедин-1, д.91 → д.35</span></div>
+          <div class="rp-ch-body"><p>Обычные переезды между локациями.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 6 → 7<span class="loc">Аламедин-1, д.35 → Джакыпова, 34А</span></div>
+          <div class="rp-ch-body"><p>Важный момент: вы не можете сами везти Алю к финалу, пока она не произнесёт вслух: «Я знаю, где находится Логово Серого Кардинала» — и не назовёт адрес сама. Дождитесь этой фразы, затем везите на Джакыпова, 34А.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-evgenia">
+      <h1 class="pagetitle">Евгения</h1>
+      <p class="subtitle">Призрак Прошлого → Гном → Хранитель Далёкой Дороги («Женя»)</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Пролог<span class="loc">Аламедин-1, д.91</span></div>
+          <div class="rp-ch-body"><p>Сразу после похищения Максима вместе с Анастасией выходите к Але, вручаете первый свиток (стараясь не рассмеяться), называете пароль «гномий брат» и номер для вызова Орла. Затем сразу уезжаете на ГЭС готовить Главу 1.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 1<span class="loc">Гоголя, 51</span></div>
+          <div class="rp-ch-body"><p>Встречаете Алю у ворот в образе Призрака (пароль «гномий брат»), читаете Свиток 1 вслух, организуете ложную откопку с пустым сундуком.</p>
+          <div class="rp-remember"><b>Реплика:</b> Свиток 1 — полный текст на странице Главы 1.</div></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 5<span class="loc">Аламедин-1, д.91</span></div>
+          <div class="rp-ch-body"><p>Заранее, до приезда Али, прячете предметы по квартире согласно гномьим рисункам-подсказкам. Реплик в этой главе у вас нет — текст читает Анастасия.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 6<span class="loc">Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Вы — Хранитель Далёкой Дороги («Женя»). Проверяете порядок 5 знаков (лампочка, танец, Турция, письмо, галочка). Если верно — задаёте загадку про «Смелость» и, получив ответ, направляете к чемодану.</p>
+          <div class="rp-remember"><b>Реплики:</b> загадка про Смелость + «Верно. Смелость была твоим первым билетом в неизвестность. Подойди к чемодану...» — полный текст на странице Главы 6.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-anastasia">
+      <h1 class="pagetitle">Анастасия</h1>
+      <p class="subtitle">Призрак Прошлого → Гном (читает вступительный текст)</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Пролог<span class="loc">Аламедин-1, д.91</span></div>
+          <div class="rp-ch-body"><p>Вместе с Евгенией вручаете Але первый свиток сразу после похищения Максима, затем уезжаете на ГЭС.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 1<span class="loc">Гоголя, 51</span></div>
+          <div class="rp-ch-body"><p>Встречаете у ворот вместе с Евгенией. Ваша главная задача — задать Але 12 вопросов о детстве Максима и оценить ответы: хорошие → карта сразу; слабые → сначала мини-задание.</p>
+          <div class="rp-remember"><b>Важно:</b> держите под рукой ответы Максима (пока не собраны — см. открытые вопросы) и критерий оценки.</div></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 5<span class="loc">Аламедин-1, д.91</span></div>
+          <div class="rp-ch-body"><p>Читаете вступительный текст «Заклятье Глупых Гномов» при входе Али в квартиру.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-taya">
+      <h1 class="pagetitle">Тая</h1>
+      <p class="subtitle">Мудрец у яблонь</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Глава 1<span class="loc">Гоголя, 51</span></div>
+          <div class="rp-ch-body"><p>Сидите среди яблонь на пути между испытаниями Главы 1 — между ложной откопкой и местом с вопросами Анастасии. Встречаете Алю короткой загадочной фразой, жестом указываете путь дальше. В основной сюжет не вмешиваетесь, задача — атмосфера.</p>
+          <div class="rp-remember"><b>Примерная реплика (можно менять):</b> «Эти яблони помнят его мальчишкой больше, чем помнят Хроники. Ступай, Хранительница, — корни укажут путь».</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-lera">
+      <h1 class="pagetitle">Лера</h1>
+      <p class="subtitle">Техконтроль → регулировщик в машине → Хранитель Пути Сердца</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Глава 2<span class="loc">Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Техконтроль локации: включаете аудио, регулируете громкость, устраняете неполадки. Не действующее лицо квеста — Аля вас не видит как персонажа.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 3<span class="loc">в машине</span></div>
+          <div class="rp-ch-body"><p>Управляете воспроизведением аудиодорожки Призрака Прошлого. Внимательно слушайте ответы Али и включайте следующий вопрос, когда чувствуете, что она закончила говорить.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 6<span class="loc">Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Вы — Хранитель Пути Сердца. Ждёте, пока Аля соберёт фразу из 4 конвертов («СЕРДЦЕ УЖЕ СДЕЛАЛО СВОЙ ВЫБОР»). Когда фраза верна — произносите реплику и направляете к шкатулке с Талисманом Сердца.</p>
+          <div class="rp-remember"><b>Реплика:</b> «Истинные слова восстановлены. Ты осталась не потому, что перестала мечтать, а потому, что услышала собственное сердце. Путь Сердца признал тебя. Подойди к шкатулке и прими его дар».</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-lera-r">
+      <h1 class="pagetitle">Лера-рыжая</h1>
+      <p class="subtitle">Хранитель Первого Очага (встречающая)</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Глава 4<span class="loc">Токтоналиева, 96</span></div>
+          <div class="rp-ch-body"><p>Встречаете Алю в мантии. Читаете вступительный текст «Дом — это не стены...», затем достаёте карточки испытания «Осколки памяти» и задаёте 4 вопроса по очереди, комментируя правильные ответы.</p>
+          <div class="rp-remember"><b>Ответы, которые должна назвать Аля:</b> Суши-дог из Фрешбокса; «ФСБиш»; «Добрый»; Киндер Сюрприз. Полные тексты вопросов — на странице Главы 4.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-andrey">
+      <h1 class="pagetitle">Андрей</h1>
+      <p class="subtitle">Последний Страж</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">До Главы 7<span class="loc">маршрут ожидания уточняется</span></div>
+          <div class="rp-ch-body"><p>По одному из вариантов маршрута Пролога — именно вы принимаете Максима от Вора и находитесь с ним в ожидании до начала Главы 7 (либо сразу, либо после «цеха»), затем везёте обоих к финалу на Джакыпова, 34А.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 7<span class="loc">Джакыпова, 34А</span></div>
+          <div class="rp-ch-body"><p>Стоите рядом с привязанным к дереву Максимом. Проходите шуточный бой с Алей на безопасном оружии (поролоновые мечи / ватные палки / лапша для бассейна / мягкие молоты) — специально поддаётесь, делаете смешные выпады, после нескольких «попаданий» падаете.</p>
+          <div class="rp-remember"><b>Реплика перед уходом:</b> «Вы победили... Но вы всё равно опоздали... Последняя страница уже никогда не будет найдена...» — и убегаете.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-maksim">
+      <h1 class="pagetitle">Максим</h1>
+      <p class="subtitle">Витязь</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Пролог<span class="loc">Аламедин-1, д.91 · 20:30–20:40</span></div>
+          <div class="rp-ch-body"><p>Выходите с Алей якобы в магазин. В этот момент вас похищает Вор.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Глава 7<span class="loc">Джакыпова, 34А</span></div>
+          <div class="rp-ch-body"><p>Стоите привязанным к дереву, пока Аля не победит Стража. После освобождения обнимаете Алю и рассказываете, где закопана последняя страница — ведёте её к месту, где уже лежит лопата, но <b>сами не копаете</b> — стоите рядом. Аля откапывает сундук сама. В финале берёте фату и надеваете её на Алю.</p>
+          <div class="rp-remember"><b>Реплики:</b> «Когда меня увели Призраки, я видел кое-что...» и финальное «Кажется... Теперь ты готова к следующей главе нашей истории» — полные тексты на странице Главы 7.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-vor">
+      <h1 class="pagetitle">Вор</h1>
+      <p class="subtitle">Исполнитель: уточняется</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Пролог<span class="loc">Аламедин-1, д.91</span></div>
+          <div class="rp-ch-body"><p>Похищаете Максима во время его выхода «в магазин» с Алей (20:30–20:40), сажаете в машину, увозите. Маршрут пока не зафиксирован окончательно: либо сразу к Андрею (который позже устроит с Алей финальную схватку), либо сначала в «цех» переждать, пока Андрей не освободится и не отвезёт обоих к дому Анастасии на Дордой (Джакыпова, 34А).</p>
+          <div class="rp-remember"><b>Уточнить:</b> финальный вариант маршрута и во сколько именно передаёте Максима Андрею.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-operator">
+      <h1 class="pagetitle">Оператор</h1>
+      <p class="subtitle">Исполнитель: уточняется — главный и единственный оператор мероприятия</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Весь квест<span class="loc">Пролог → Глава 7</span></div>
+          <div class="rp-ch-body"><p>Присутствуете на всех локациях в тематическом наряде, снимаете происходящее. Лёгкий юмор на фоне уместен, но в меру — важно не разрушать магическую атмосферу для Али.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-mama">
+      <h1 class="pagetitle">Хранительница памяти (мама Али)</h1>
+      <p class="subtitle">Исполнитель: уточняется</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Глава 2<span class="loc">Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Встречаете Алю, читаете Свиток 2 при входе. После того как Аля соберёт все три листочка из Сосудов Памяти, принимаете от неё вслух текст-обещание. Выдаёте второй сундук со свитком.</p>
+          <div class="rp-remember"><b>Реплика для приёма обещания:</b> «Чтобы получить второй сундук, дай Хранителю обещание...» — полный текст на странице Главы 2.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-role-helper">
+      <h1 class="pagetitle">Помощник мамы Али</h1>
+      <p class="subtitle">Исполнитель: уточняется</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Глава 2<span class="loc">Аламедин-1, д.35</span></div>
+          <div class="rp-ch-body"><p>Знаете весь сценарий Главы 2 целиком. Основная задача — подстраховывать маму Али: помочь найти сосуд, если Аля застряла, подсказать, если сбился темп, устранить любую заминку.</p></div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.navbtn');
+  const sections = document.querySelectorAll('.section');
+  function activate(target){
+    sections.forEach(s => s.classList.toggle('active', s.id === 'sec-' + target));
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.target === target));
+    document.getElementById('sidebar').classList.remove('open');
+    window.scrollTo(0,0);
+    try{ history.replaceState(null,'','#'+target); }catch(e){}
+  }
+  buttons.forEach(b => b.addEventListener('click', () => activate(b.dataset.target)));
+  document.getElementById('menutoggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+  const initial = (location.hash || '').replace('#','') || 'overview';
+  activate(document.getElementById('sec-' + initial) ? initial : 'overview');
+</script>
