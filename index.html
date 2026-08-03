@@ -45,6 +45,35 @@
     --gold: #a37f2c; --line: #c9bfa2; --shadow: rgba(38,42,32,0.12);
   }
 
+  /* ---------- Wonderland theme (13 августа) ---------- */
+  :root.wonderland{
+    --parchment: #fbeaf0; --parchment-2: #f3d5e0; --parchment-3: #fff5f8;
+    --ink: #3a1030; --ink-soft: #7a3f63; --ink-faint: #a97f97;
+    --accent: #c2185b; --accent-strong: #8e0e44; --accent-2: #4a4e9e;
+    --gold: #b8860b; --line: #e3b8cb; --shadow: rgba(58,16,48,0.15);
+    --serif: "Bodoni MT", Didot, Georgia, "Times New Roman", serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root.wonderland{
+      --parchment: #1c0f18; --parchment-2: #2a1522; --parchment-3: #170b12;
+      --ink: #f6e2ec; --ink-soft: #d9a8c2; --ink-faint: #b483a0;
+      --accent: #ff5c9c; --accent-strong: #ff86b3; --accent-2: #8892ff;
+      --gold: #e0b34d; --line: #4a2638; --shadow: rgba(0,0,0,0.5);
+    }
+  }
+  :root.wonderland[data-theme="dark"]{
+    --parchment: #1c0f18; --parchment-2: #2a1522; --parchment-3: #170b12;
+    --ink: #f6e2ec; --ink-soft: #d9a8c2; --ink-faint: #b483a0;
+    --accent: #ff5c9c; --accent-strong: #ff86b3; --accent-2: #8892ff;
+    --gold: #e0b34d; --line: #4a2638; --shadow: rgba(0,0,0,0.5);
+  }
+  :root.wonderland[data-theme="light"]{
+    --parchment: #fbeaf0; --parchment-2: #f3d5e0; --parchment-3: #fff5f8;
+    --ink: #3a1030; --ink-soft: #7a3f63; --ink-faint: #a97f97;
+    --accent: #c2185b; --accent-strong: #8e0e44; --accent-2: #4a4e9e;
+    --gold: #b8860b; --line: #e3b8cb; --shadow: rgba(58,16,48,0.15);
+  }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -82,6 +111,14 @@
     font-family:var(--sans); font-size:11px; letter-spacing:.06em;
     text-transform:uppercase; color:var(--ink-faint); font-weight:600;
   }
+  .site-switch{display:flex; gap:6px; margin:0 6px 18px;}
+  .sitebtn{
+    flex:1; padding:9px 6px; border-radius:7px; border:1px solid var(--line);
+    background:var(--parchment-2); color:var(--ink-soft); font-family:var(--sans);
+    font-size:11.5px; font-weight:700; cursor:pointer; line-height:1.3; text-align:center;
+  }
+  .sitebtn.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+
   .navgroup{margin-bottom:18px;}
   .navgroup-label{
     font-size:11px; letter-spacing:.08em; text-transform:uppercase;
@@ -320,37 +357,71 @@
       <small>Рабочий сценарий — Аля &amp; Максим</small>
     </div>
 
-    <div class="navgroup">
-      <div class="navgroup-label">Обзор</div>
-      <button class="navbtn" data-target="overview">Легенда, маршрут, роли</button>
+    <div class="site-switch">
+      <button class="sitebtn active" data-site="lotr">12 августа<br>Квест Летописи</button>
+      <button class="sitebtn" data-site="wonderland">13 августа<br>Совет Дев</button>
     </div>
 
-    <div class="navgroup">
-      <div class="navgroup-label">Главы</div>
-      <button class="navbtn" data-target="prolog"><span class="num">0</span> Пролог — похищение</button>
-      <button class="navbtn" data-target="ch1"><span class="num">1</span> Родина витязя</button>
-      <button class="navbtn" data-target="ch2"><span class="num">2</span> Дом детства Али</button>
-      <button class="navbtn" data-target="ch3"><span class="num">3</span> Дорога</button>
-      <button class="navbtn" data-target="ch4"><span class="num">4</span> Первый Очаг</button>
-      <button class="navbtn" data-target="ch5"><span class="num">5</span> Заклятье Гномов</button>
-      <button class="navbtn" data-target="ch6"><span class="num">6</span> Перекрёсток</button>
-      <button class="navbtn" data-target="ch7"><span class="num">7</span> Последняя страница</button>
+    <div id="nav-lotr">
+      <div class="navgroup">
+        <div class="navgroup-label">Обзор</div>
+        <button class="navbtn" data-target="overview">Легенда, маршрут, роли</button>
+      </div>
+
+      <div class="navgroup">
+        <div class="navgroup-label">Главы</div>
+        <button class="navbtn" data-target="prolog"><span class="num">0</span> Пролог — похищение</button>
+        <button class="navbtn" data-target="ch1"><span class="num">1</span> Родина витязя</button>
+        <button class="navbtn" data-target="ch2"><span class="num">2</span> Дом детства Али</button>
+        <button class="navbtn" data-target="ch3"><span class="num">3</span> Дорога</button>
+        <button class="navbtn" data-target="ch4"><span class="num">4</span> Первый Очаг</button>
+        <button class="navbtn" data-target="ch5"><span class="num">5</span> Заклятье Гномов</button>
+        <button class="navbtn" data-target="ch6"><span class="num">6</span> Перекрёсток</button>
+        <button class="navbtn" data-target="ch7"><span class="num">7</span> Последняя страница</button>
+      </div>
+
+      <div class="navgroup">
+        <div class="navgroup-label">Страницы ролей</div>
+        <button class="navbtn sub" data-target="role-evgeniy">Евгений — Серый Орёл</button>
+        <button class="navbtn sub" data-target="role-evgenia">Евгения</button>
+        <button class="navbtn sub" data-target="role-anastasia">Анастасия</button>
+        <button class="navbtn sub" data-target="role-taya">Тая</button>
+        <button class="navbtn sub" data-target="role-lera">Лера</button>
+        <button class="navbtn sub" data-target="role-lera-r">Лера-рыжая</button>
+        <button class="navbtn sub" data-target="role-andrey">Андрей</button>
+        <button class="navbtn sub" data-target="role-maksim">Максим</button>
+        <button class="navbtn sub" data-target="role-vor">Вор</button>
+        <button class="navbtn sub" data-target="role-operator">Оператор</button>
+        <button class="navbtn sub" data-target="role-mama">Хранительница памяти (мама Али)</button>
+        <button class="navbtn sub" data-target="role-helper">Помощник мамы Али</button>
+      </div>
     </div>
 
-    <div class="navgroup">
-      <div class="navgroup-label">Страницы ролей</div>
-      <button class="navbtn sub" data-target="role-evgeniy">Евгений — Серый Орёл</button>
-      <button class="navbtn sub" data-target="role-evgenia">Евгения</button>
-      <button class="navbtn sub" data-target="role-anastasia">Анастасия</button>
-      <button class="navbtn sub" data-target="role-taya">Тая</button>
-      <button class="navbtn sub" data-target="role-lera">Лера</button>
-      <button class="navbtn sub" data-target="role-lera-r">Лера-рыжая</button>
-      <button class="navbtn sub" data-target="role-andrey">Андрей</button>
-      <button class="navbtn sub" data-target="role-maksim">Максим</button>
-      <button class="navbtn sub" data-target="role-vor">Вор</button>
-      <button class="navbtn sub" data-target="role-operator">Оператор</button>
-      <button class="navbtn sub" data-target="role-mama">Хранительница памяти (мама Али)</button>
-      <button class="navbtn sub" data-target="role-helper">Помощник мамы Али</button>
+    <div id="nav-wonderland" style="display:none;">
+      <div class="navgroup">
+        <div class="navgroup-label">Обзор</div>
+        <button class="navbtn" data-target="w-overview">Тема, дресс-код, программа дня</button>
+      </div>
+
+      <div class="navgroup">
+        <div class="navgroup-label">Квест Кролика</div>
+        <button class="navbtn" data-target="w-intro">Вступление и роли</button>
+        <button class="navbtn" data-target="w-stage1"><span class="num">1</span> Первый конверт</button>
+        <button class="navbtn" data-target="w-stage2"><span class="num">2</span> Волшебные зелья</button>
+        <button class="navbtn" data-target="w-stage3"><span class="num">3</span> Комната</button>
+        <button class="navbtn" data-target="w-stage4"><span class="num">4</span> Части записки</button>
+        <button class="navbtn" data-target="w-stage5"><span class="num">5</span> Бита</button>
+        <button class="navbtn" data-target="w-stage6"><span class="num">6</span> Кроличьи следы</button>
+        <button class="navbtn" data-target="w-stage7"><span class="num">7</span> Встреча с принцессами</button>
+        <button class="navbtn" data-target="w-stage8"><span class="num">8</span> Пиньята — финал</button>
+      </div>
+
+      <div class="navgroup">
+        <div class="navgroup-label">Страницы ролей</div>
+        <button class="navbtn sub" data-target="w-role-nastya">Настя — Красная Королева</button>
+        <button class="navbtn sub" data-target="w-role-krolik">Кролик (аудио)</button>
+        <button class="navbtn sub" data-target="w-role-princesses">Девочки — принцессы</button>
+      </div>
     </div>
 
     <div class="sidebar-foot">
@@ -1431,6 +1502,458 @@
       </div>
     </section>
 
+    <!-- ================= WONDERLAND: OVERVIEW ================= -->
+    <section class="section" id="sec-w-overview">
+      <h1 class="pagetitle">Совет Дев — 13 августа</h1>
+      <p class="subtitle">Тема: «Принцессы лёгкого поведения» · кодовое название — «Шлюшки попали в сказку»</p>
+
+      <div class="field">
+        <div class="field-label">Тема и дресс-код (сообщение для девочек)</div>
+        <div class="legend-block">Великие девы Средиземья, всем привет! 💋<br><br>
+Если вы попали в этот сокрытый чат, значит официально призваны в Круг дев для подготовки великого Обряда нашей любимой Али! 👰🏻‍♀️✨<br><br>
+Да, до самого девичника ещё есть время, но истинная магия требует долгой подготовки. А легендарные сказочные обряды — тем более. 😌<br><br>
+Поэтому мы, как верные Хранительницы, начинаем заранее с самого важного — нашего дресс-кода. Потому что этот вечер заслуживает не просто красивых одеяний, а явления настоящих волшебных дев ✨<br><br>
+✨ Тема девичника — «Принцессы лёгкого поведения» ✨ (кодовое название — Шлюшки попали в сказку)<br><br>
+Мы идём не в обычную скромную сказку Средиземья. Мы идём в сказку после полуночи, где принцессы давно выросли, сбросили оковы приличий и начали жить свою лучшую жизнь ✨<br><br>
+У каждой волшебной героини есть сторона, которую обычно никто не видит. Мы привыкли видеть принцесс, фей и русалок милыми, добрыми и правильными. Но давайте будем честны: внутри каждой хорошей девочки живёт та версия, которая хочет быть чуть менее приличной и чуть более опасной для окружающего королевства 💋<br><br>
+Именно эту версию мы и будем выгуливать на девичнике. На один вечер все наши сказочные героини перестают быть скромными. Они больше не стараются соответствовать чужим ожиданиям, не переживают, что о них подумает Совет Мудрецов, и не делают вид, что не знают, какой сокрушительный эффект производят. Это персонажи, которые полностью приняли свою сексуальность, свою притягательность и свою тёмную сторону 👑✨<br><br>
+Поэтому представьте не просто Золушку, а Золушку, которая знает, что сегодня весь бал смотрит только на неё. Не просто Ариэль, а Ариэль, которая прекрасно понимает, насколько она соблазнительна. Не просто Белоснежку, а Белоснежку, которая давно перестала быть самой невинной девушкой во всём Средиземье.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Программа дня</div>
+        <div class="route">
+          <div class="stop"><span class="t">18:00</span><span class="a">Алю привозят, глаза завязаны</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Заводят в дом</span><span class="a">повязку снимают внутри</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Квест Кролика</span><span class="a">этапы 1–8</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Пиньята</span><span class="a">кодовое слово вслух</span></div>
+          <span class="arrow">→</span>
+          <div class="stop"><span class="t">Безумное чаепитие</span><span class="a">старт девичника</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Общий тайминг</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Время</th><th>Что происходит</th><th>Кто участвует</th></tr></thead>
+            <tbody>
+              <tr><td class="num">13 авг, 18:00</td><td>Алю привозят к дому, глаза завязаны, атмосферная музыка</td><td>Настя</td></tr>
+              <tr><td class="num">сразу после</td><td>Повязку снимают внутри дома — начинается аудио от Кролика</td><td>Настя, Кролик (аудио)</td></tr>
+              <tr><td class="num">уточняется</td><td>Этапы 1–6: конверты, зелья, комната, записка, бита, следы</td><td>Настя (проводник)</td></tr>
+              <tr><td class="num">уточняется</td><td>Этап 7: выход во двор, встреча с принцессами</td><td>Все девочки</td></tr>
+              <tr><td class="num">уточняется</td><td>Этап 8: пиньята, кодовое слово</td><td>Все девочки</td></tr>
+              <tr><td class="num">уточняется</td><td>Начало Безумного чаепития / основного девичника</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Открытые вопросы</div>
+        <div class="note-open"><b>Ещё уточнить:</b> точный тайминг этапов 1–8 (сейчас известно только время приезда — 18:00); текст самого аудио Кролика — пока есть только пересказ содержания, не дословный текст.</div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: INTRO ================= -->
+    <section class="section" id="sec-w-intro">
+      <h1 class="pagetitle">Квест Кролика — вступление и роли</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл квеста</div>
+        <div class="field-body"><p>Алю, ничего не подозревающую, привозят к дому с завязанными глазами — чтобы она не увидела украшения и остальных девочек раньше времени. Внутри повязку снимают, и дальше она сама, шаг за шагом, идёт по следам Кролика в поисках потерянного кодового слова, без которого не может начаться Безумное чаепитие. Квест устроен так, чтобы Аля прошла весь дом — снизу вверх и обратно во двор, — и в конце неожиданно встретила всех подруг, наряженных принцессами.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Настя — Красная Королева<span class="who">Исполнитель: Настя</span></div>
+            <div class="cast-does">Проводник Али на протяжении всего квеста — помогает физически ориентироваться, но не решает задания за неё.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Кролик<span class="who">Заранее записанная аудиодорожка</span></div>
+            <div class="cast-does">Голос, который звучит один раз — во вступлении (Этап 1). Дальше появляется только в письмах.</div>
+          </div>
+          <div class="cast-item">
+            <div class="cast-role">Все девочки — принцессы<span class="who">Исполнители: все участницы</span></div>
+            <div class="cast-does">Появляются в конце (Этап 7) во дворе — с музыкой и пузырями, ждут Алю рядом с пиньятой.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Шаги квеста целиком</div>
+        <ol class="steps">
+          <li>Слушает Кролика (аудио) и находит перед собой конверт — он ведёт к зельям «Выпей меня».</li>
+          <li>Находит зелья и конверт — ведёт в одну из комнат.</li>
+          <li>В комнате находит конверт — нужно собрать записки.</li>
+          <li>Ищет 5 частей записки — в них написано, где искать биту.</li>
+          <li>Ищет биту с запиской на ней — записка ведёт к следам на первом этаже.</li>
+          <li>Рядом со следами находит записку — нужно идти к принцессам.</li>
+          <li>Находит всех во дворе, с музыкой и пузырями, рядом — последняя записка.</li>
+          <li>Читает записку и разбивает пиньяту.</li>
+        </ol>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;">Квест проходит внутри дома, чтобы Аля не увидела основные украшения заранее — их и всех девочек она найдёт только в конце, вместе с пиньятой.</p>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 1 ================= -->
+    <section class="section" id="sec-w-stage1">
+      <h1 class="pagetitle"><span class="chnum">1</span>Первый конверт</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Кролик объясняет правила игры: без кодового слова Безумное чаепитие не начнётся, а сам он его потерял. Аля понимает, что дальше придётся полагаться только на себя.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Повязку с глаз снимают внутри дома.</li>
+          <li>Звучит аудио — Кролик приветствует Алю и рассказывает, что потерял кодовое слово.</li>
+          <li>После аудио Аля видит перед собой первый конверт.</li>
+          <li>Читает письмо — в конце сказано, что рядом ждут волшебные зелья, но сначала нужно найти записку рядом с ними.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Аудио Кролика (пересказ содержания — дословный текст пока не готов)</span>
+        <div class="scroll">Кролик приветствует Алю и рассказывает, что совершенно не успел подготовиться к её приходу. Он должен был устроить Безумное чаепитие, но умудрился потерять кодовое слово, без которого праздник не может начаться.
+Сам Кролик уже снова куда-то опаздывает и не может его искать, поэтому просит Алю пройти по его следам, найти все подсказки и вернуть потерянное кодовое слово.
+До самого конца пути ей придётся полагаться только на себя — сказочные принцессы пока не появятся.</div>
+
+        <span class="scroll-label">Первый конверт</span>
+        <div class="scroll">Добро пожаловать в эту Страну Чудес.
+Всё уже почти готово к твоему приходу!
+Но здесь есть одно очень важное правило.
+Без кодового слова Безумное чаепитие начаться не может.
+А Кролик... Ну конечно.
+Он умудрился его потерять.
+Поэтому тебе придётся пройти по его следам и собрать все подсказки, которые он успел оставить.
+И да... до самого конца тебе придётся полагаться только на себя. Не ищи сказочных принцесс раньше времени — они появятся тогда, когда придёт их очередь.
+А сейчас внимательно осмотрись вокруг.
+Где-то рядом тебя уже ждут волшебные зелья...
+Но сначала найди записку рядом с ними.
+Она могла спрятаться.
+Сначала прочитай её. Она подскажет, что делать с зельями.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля идёт искать зелья и записку рядом с ними — начинается Этап 2.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 2 ================= -->
+    <section class="section" id="sec-w-stage2">
+      <h1 class="pagetitle"><span class="chnum">2</span>Волшебные зелья</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Аля находит пять одинаковых бутылочек «Выпей меня» и должна честно попробовать каждую, чтобы найти настоящую — с номером комнаты на дне.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Находит записку рядом с пятью бутылочками «Выпей меня» и читает её первой.</li>
+          <li>Пробует зелья по очереди.</li>
+          <li>Одно из них оказывается подозрительно «весёлым» — это и есть настоящее.</li>
+          <li>На дне настоящего зелья — номер комнаты.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Записка рядом с зельями</span>
+        <div class="scroll">Ты ведь не думала, что в Стране Чудес обойдётся без зелий? Чтобы найти остальные подсказки, тебе придётся стать... чуточку меньше.
+Не бойся.
+На самом деле уменьшится не твой рост, а всё лишнее вокруг.
+Зато самые незаметные детали вдруг станут заметными.
+Именно для этого Кролик приготовил волшебные зелья.
+Правда...
+Он опять всё перепутал.
+И теперь совершенно не помнит, в какой из колбочек оказалось настоящее.
+Перед тобой пять зелий.
+Но только на дне настоящего спрятан номер комнаты, где тебя уже ждёт следующая подсказка от Кролика. К сожалению, просто посмотреть на дно не получится.
+Придётся честно выпить каждое зелье.
+Когда одно из них вдруг окажется подозрительно... весёлым — значит, ты нашла настоящее.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля узнаёт номер комнаты и поднимается туда — начинается Этап 3.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 3 ================= -->
+    <section class="section" id="sec-w-stage3">
+      <h1 class="pagetitle"><span class="chnum">3</span>Комната</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>В нужной комнате Аля узнаёт, что дальше ей понадобится важный предмет — но подсказка о нём разлетелась на пять частей по всему второму этажу.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля поднимается в комнату, номер которой узнала по зелью.</li>
+          <li>Находит там конверт.</li>
+          <li>Письмо сообщает: нужно найти важный предмет, но записка о нём разлетелась на 5 частей и спрятана по всему второму этажу.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Записка в комнате</span>
+        <div class="scroll">Кажется, волшебное зелье всё-таки сработало.
+И теперь ты уже умеешь замечать то, что раньше было скрыто!
+А значит, пришло время найти самый важный предмет во всей этой истории.
+Без него дальше — никак.
+Вообще никак.
+Кролик заранее приготовил для тебя записку, в которой написал, что именно нужно найти и где это спрятано.
+Но некоторые записки в Стране Чудес очень любят играть в прятки.
+И эта оказалась именно такой.
+Она разлетелась на пять частей и спряталась по всему второму этажу.
+Так что искать её нужно только наверху.
+Когда найдёшь все пять частей — сложи их вместе.
+И тогда Кролик наконец расскажет, какой предмет поможет тебе продолжить путь.
+Удачи!</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля начинает искать пять частей записки по второму этажу — Этап 4.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 4 ================= -->
+    <section class="section" id="sec-w-stage4">
+      <h1 class="pagetitle"><span class="chnum">4</span>Части записки</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Собрав по кусочкам разлетевшуюся записку, Аля наконец узнаёт, что за предмет ей нужен и где искать биту.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Ищет 5 частей записки по всему второму этажу.</li>
+          <li>Складывает части вместе.</li>
+          <li>Собранный текст сообщает, где искать биту.</li>
+          <li>Спускается на первый этаж искать её.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля знает, где искать биту, и идёт за ней — Этап 5.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 5 ================= -->
+    <section class="section" id="sec-w-stage5">
+      <h1 class="pagetitle"><span class="chnum">5</span>Бита</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Аля находит биту с запиской — неожиданный предмет, который Кролик сам не ожидал понадобившимся. Записка отправляет её к следам на первом этаже, у кухни.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Находит биту по подсказке из собранной записки.</li>
+          <li>На бите закреплена следующая записка.</li>
+          <li>Читает её — там сказано спуститься на первый этаж и искать кроличьи следы у кухни.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Записка на бите</span>
+        <div class="scroll">Ну вот...
+Бита.
+Неожиданно, правда?
+Кажется, даже Кролик не ожидал, что однажды сказочной принцессе понадобится именно она.
+Но в Стране Чудес всякое случается.
+А теперь скорее спускайся на первый этаж.
+Кролик так торопился, что, убегая, оставил за собой целую дорожку из кроличьих лапок.
+Не ищи их снаружи — они всё ещё в доме, где-то рядом с кухней.
+Ты сразу их узнаешь.
+Как только увидишь следы — просто иди по ним.
+Они сами приведут тебя к следующей подсказке.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля с битой в руках спускается на первый этаж искать следы — Этап 6.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 6 ================= -->
+    <section class="section" id="sec-w-stage6">
+      <h1 class="pagetitle"><span class="chnum">6</span>Кроличьи следы</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Следы приводят Алю к пирожному «Съешь меня» — последнему шагу перед тем, как она официально станет частью Безумного чаепития и найдёт своих принцесс.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Идёт по кроличьим следам рядом с кухней на первом этаже.</li>
+          <li>Следы приводят к пирожному «Съешь меня» и конверту.</li>
+          <li>Письмо сообщает: кодовое слово теперь рядом с принцессами — нужно выйти из дома и найти их.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Записка у тортика</span>
+        <div class="scroll">Ну конечно.
+После волшебного зелья обязательно должно появиться «Съешь меня».
+Таковы правила Страны Чудес.
+Говорят, это пирожное умеет делать одну очень важную вещь.
+Оно помогает найти дорогу туда, куда приглашают только самых желанных гостей.
+До этого момента ты была всего лишь гостьей Страны Чудес.
+После этого кусочка ты официально становишься частью Безумного чаепития.
+И, кажется...
+Кролик наконец-то вспомнил, где спрятал кодовое слово.
+Оно совсем рядом с твоими сказочными принцессами.
+Они уже собрались и с нетерпением ждут только тебя.
+Выходи из дома и найди их.
+Рядом с ними тебя будет ждать последний конверт.
+Именно он подскажет, как достать кодовое слово.
+Кажется...
+Безумное чаепитие вот-вот начнётся.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля выходит во двор искать принцесс — Этап 7.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 7 ================= -->
+    <section class="section" id="sec-w-stage7">
+      <h1 class="pagetitle"><span class="chnum">7</span>Встреча с принцессами</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Впервые за весь квест Аля не одна — во дворе её ждут все подруги, наряженные принцессами, с музыкой и пузырями. Здесь заканчивается путь-в-одиночку и начинается сам девичник.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">👥 Кто участвует</div>
+        <div class="cast">
+          <div class="cast-item">
+            <div class="cast-role">Все девочки — принцессы<span class="who">Исполнители: все участницы</span></div>
+            <div class="cast-does">Ждут во дворе с музыкой и пузырями. Рядом — последний конверт и подвешенная пиньята.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля выходит во двор.</li>
+          <li>Там уже играет музыка и пускают пузыри.</li>
+          <li>Её встречают все девочки в образах сказочных принцесс.</li>
+          <li>Рядом находится последний конверт и подвешенная пиньята.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Аля берёт последний конверт — начинается Этап 8.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: STAGE 8 ================= -->
+    <section class="section" id="sec-w-stage8">
+      <h1 class="pagetitle"><span class="chnum">8</span>Пиньята — финал</h1>
+
+      <div class="field">
+        <div class="field-label">🎯 Смысл этапа</div>
+        <div class="field-body"><p>Финал квеста: Аля разбивает пиньяту, находит кодовое слово и произносит его вслух — с этого момента официально начинается Безумное чаепитие, то есть сам девичник.</p></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🎬 Последовательность</div>
+        <ol class="steps">
+          <li>Аля читает последний конверт.</li>
+          <li>Разбивает пиньяту (той самой битой из Этапа 5).</li>
+          <li>Внутри — сюрпризы и кодовое слово.</li>
+          <li>Аля громко произносит кодовое слово вслух.</li>
+          <li>Начинается Безумное чаепитие — основной девичник.</li>
+        </ol>
+      </div>
+
+      <div class="field">
+        <div class="field-label">🗣 Реплики</div>
+        <span class="scroll-label">Записка у пиньяты</span>
+        <div class="scroll">Ты нашла все подсказки, не потерялась в Стране Чудес и даже сумела разобраться в том, что не смог найти сам Кролик.
+А значит...
+Пришло время открыть последнюю тайну.
+Перед тобой подарок, который Кролик приготовил специально для тебя.
+Разбей его.
+Внутри ты найдёшь сюрпризы...
+И самое главное — кодовое слово. Когда найдёшь его — громко произнеси его вслух.
+Именно оно откроет двери Безумного чаепития.
+А дальше...
+Дальше уже не будет никаких испытаний.
+Будет только сказка.
+Счастливого девичника!
+И помни: самые лучшие истории всегда происходят рядом с теми, кого ты любишь. Счастливого Безумного чаепития!
+Добро пожаловать в сказку!</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">➡ Чем заканчивается этап</div>
+        <div class="end-box"><span class="mark">✦</span><div>Квест окончен. Начинается Безумное чаепитие — основной девичник.</div></div>
+      </div>
+    </section>
+
+    <!-- ================= WONDERLAND: ROLE PAGES ================= -->
+    <section class="section" id="sec-w-role-nastya">
+      <h1 class="pagetitle">Настя — Красная Королева</h1>
+      <p class="subtitle">Проводник Али на протяжении всего квеста Кролика</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Этапы 1–8<span class="loc">весь дом и двор</span></div>
+          <div class="rp-ch-body"><p>Сопровождаете Алю от момента, когда с неё снимают повязку, до самой пиньяты. Ваша задача — быть рядом физически (провожать между этажами и комнатами), но не решать задания и не подсказывать раньше времени. В образе Красной Королевы.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-w-role-krolik">
+      <h1 class="pagetitle">Кролик</h1>
+      <p class="subtitle">Голос — заранее записанная аудиодорожка</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Этап 1<span class="loc">внутри дома, сразу после снятия повязки</span></div>
+          <div class="rp-ch-body"><p>Единственное появление голосом — вступительное аудио, после которого Аля видит первый конверт. Дальше по квесту Кролик существует только в письмах.</p></div>
+          <div class="rp-remember"><b>Не готово:</b> дословный текст аудио — пока есть только пересказ содержания (см. Этап 1).</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-w-role-princesses">
+      <h1 class="pagetitle">Девочки — принцессы</h1>
+      <p class="subtitle">Все участницы, кроме Насти (она — проводник) и Али</p>
+      <div class="rp-grid">
+        <div class="rp-ch"><div class="rp-ch-head">Этап 7<span class="loc">двор</span></div>
+          <div class="rp-ch-body"><p>Ждёте во дворе в образах сказочных принцесс — с музыкой и мыльными пузырями. До этого момента Аля не должна вас видеть.</p></div></div>
+        <div class="rp-ch"><div class="rp-ch-head">Этап 8<span class="loc">двор</span></div>
+          <div class="rp-ch-body"><p>Присутствуете при разбивании пиньяты и произнесении кодового слова — с этого момента начинается сам девичник.</p></div></div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -1448,6 +1971,21 @@
   document.getElementById('menutoggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
   });
+
+  const siteButtons = document.querySelectorAll('.sitebtn');
+  function switchSite(site, target){
+    document.documentElement.classList.toggle('wonderland', site === 'wonderland');
+    siteButtons.forEach(b => b.classList.toggle('active', b.dataset.site === site));
+    document.getElementById('nav-lotr').style.display = site === 'lotr' ? '' : 'none';
+    document.getElementById('nav-wonderland').style.display = site === 'wonderland' ? '' : 'none';
+    activate(target || (site === 'wonderland' ? 'w-overview' : 'overview'));
+  }
+  siteButtons.forEach(b => b.addEventListener('click', () => switchSite(b.dataset.site)));
+
   const initial = (location.hash || '').replace('#','') || 'overview';
-  activate(document.getElementById('sec-' + initial) ? initial : 'overview');
+  if (document.getElementById('sec-' + initial)) {
+    switchSite(initial.startsWith('w-') ? 'wonderland' : 'lotr', initial);
+  } else {
+    switchSite('lotr', 'overview');
+  }
 </script>
